@@ -1,0 +1,255 @@
+.full-body{
+    height: 100vh;
+}
+
+.green{
+    background-color: rgb(66, 185, 131);
+}
+
+.white-text{
+    color: white;
+}
+
+.title-parent{
+    flex:1;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.computer{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.menu-content{
+    flex:5
+}
+
+.top{
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(66, 185, 131);
+
+}
+
+.bottom{
+    flex: 7;
+    display: flex;
+    flex-direction: row;
+}
+
+.options{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(66, 185, 131);
+}
+
+.option{
+    text-align: center;
+    flex: 1;
+    padding: 10px;
+}
+
+.content{
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+}
+
+.article{
+    width: 25%;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.article2{
+    width: 50%;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img_article{
+    margin-bottom: 10px;
+}
+
+.button-article{
+    background-color: rgb(66, 185, 131);
+    color: white;
+    text-align: center;
+    width: 100%;
+}
+
+.name_article{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.line{
+    height: 30%;
+    display: flex;
+    flex-direction: row;
+    margin: 20px 20px;
+    align-items: center;
+}
+
+.computer-left{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(66, 185, 131);
+    height: 100vh;
+    box-shadow: 10px 10px 10px #aaa;
+}
+
+.links-computer-left{
+    flex:8;
+    display: flex;
+}
+
+.links-proposition{
+    padding: 15px;
+}
+
+.computer-right{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.filter{
+    flex:5;
+    display: flex;
+    flex-direction: row;
+}
+
+.elem-filter{
+    flex:2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-content{
+    flex:15;
+}
+
+.flex-style{
+    display: flex;
+    flex-direction: row;
+}
+
+.fa-1x {
+    font-size: 1.5rem;
+}
+.navbar-toggler.toggler-example {
+    cursor: pointer;
+}
+.dark-blue-text {
+    color: #0A38F5;
+}
+.dark-pink-text {
+    color: #AC003A;
+}
+.dark-amber-text {
+    color: #ff6f00;
+}
+.dark-teal-text {
+    color: #004d40;
+}
+
+.light-blue{
+    background-color: dodgerblue;
+}
+
+.checkbox-group{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.checkbox-group label{
+    margin-left: 6px;
+}
+
+.carambarNameSearch{
+    width: 50%;
+    margin: 10px auto;
+}
+
+.carambarRarity{
+    width:50%;
+    margin: 10px auto;
+}
+
+.bodyTop{
+    margin-top: 5px;
+}
+
+h5{
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+.inputRarityBlock{
+    width: 90%;
+    margin: auto;
+}
+
+.carambarCategory{
+    width: 75%;
+}
+
+.wrapperButton{
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.carambar_name_part{
+    display: inline-block;
+    width: 90%;
+}
+
+.nav-left{
+    display: flex;
+    flex-direction: row;
+    flex:1;
+    background-color: green;
+}
+
+.content-right{
+    display: flex;
+    flex-direction: row;
+    flex:4;
+    background-color: red;
+}
+
+.proposition{
+    padding:3px;
+    border: 1px solid darkgray;
+    background-color: white;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
+#sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
