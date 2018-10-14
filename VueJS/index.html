@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-
-<head xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
-    <title>salut lol</title>
+<head>
+    <title>carambibi</title>
     <meta charset="utf-8">
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
@@ -19,6 +18,26 @@
 <div class="container">
 
     <div id="market">
+
+        <div class="filter row btn-toolbar">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Rechercher" aria-label="Rechercher" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary search-btn" type="button"> <i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Catégorie
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Au fruits</a>
+                    <a class="dropdown-item" href="#">Au caramel</a>
+                    <a class="dropdown-item" href="#">Qui pique</a>
+                </div>
+            </div>
+        </div>
+
         <ul class="items">
             <li v-for="carambar in carambars" class="hvr-grow">
 
@@ -33,7 +52,7 @@
                         {{carambar.desc}}
                     </div>
                     <div slot="action">
-                        <a href="#" class="btn btn-primary" v-on:click="show(carambar)">Voir les offres</a>
+                        <a href="#" class="btn btn-primary" v-on:click="show(carambar)">Voir les offres ({{carambar.offers.length}})</a>
                     </div>
                 </item>
 
@@ -82,7 +101,8 @@
                                 <br> € / g
                             </div>
                             <div class="col-2 offer-action">
-                                <button type="button" class="btn btn-default btn-lg">
+                                <button type="button" class="btn btn-default btn-lg"
+                                v-on:click="confirm(offer)">
                                     <i class="fas fa-shopping-cart"></i>
                                 </button>
                             </div>
@@ -93,27 +113,42 @@
             </div>
         </modal>
 
+        <modal v-if="showConfirmModal" @close="showConfirmModal = false">
+            <h3 slot="header">Confirmation de rendez-vous avec <i>{{ selectedOffer.user}}</i></h3>
+            <div slot="img">
+                <img class="fake-map"
+                     src="https://iphonesoft.fr/images/_122012/google_maps_donnees_localisation.jpg"/>
+            </div>
+
+            <div slot="desc">
+                <p>Téléchargez l'application pour vous laisser guider jusqu'au bas des blocs</p>
+                <img height="100px" src="https://h24-original.s3.amazonaws.com/120041/22642034-Wrt29.jpg"/>
+                <img height="100px" src="http://azonmobile.com/cms/system_direct_files/qrcodes/b76170dabe4189bdd2acf273224955fb432906f8f3bad3907b38451f2dd7949e.png"/>
+            </div>
+            <div slot="offers"></div>
+        </modal>
+
     </div>
 </div>
 
 <script type="text/template" id="item-template">
     <div class="card">
+        <div class="card-title">
+            <slot name="title">
+                default name
+            </slot>
+        </div>
         <div class="item-img">
             <slot name="img">
                 default img
             </slot>
         </div>
         <div class="card-body">
-            <p class="card-title">
-                <slot name="title">
-                    default name
-                </slot>
-            </p>
-            <p class="card-text">
+            <div class="card-text">
                 <slot name="desc">
                     default desc
                 </slot>
-            </p>
+            </div>
         </div>
 
         <div class="card-bottom">
@@ -124,6 +159,7 @@
     </div>
 
 </script>
+
 
 <script type="text/x-template" id="modal-template">
     <transition name="modal">

@@ -6,31 +6,41 @@ Vue.component('item', {
     template: '#item-template'
 });
 
-
-let title = new Vue({
-	el: '#title',
-	data: {
-		title: 'Tradambar',
-	}
+Vue.component('modal-confirm', {
+    template: '#modal-confirm-template'
 });
 
+
+let title = new Vue({
+    el: '#title',
+    data: {
+        title: 'Tradambar',
+    }
+});
 
 
 let market = new Vue({
     el: '#market',
     data: {
         carambars: articles_data,
-		showModal: false,
+        showModal: false,
+        showConfirmModal: false,
         selectedCarambar: null,
+        selectedOffer: null,
     },
-	methods: {
+    methods: {
         show: function (c) {
             console.log(this.carambars)
             this.selectedCarambar = c;
             this.showModal = true;
         },
-        randomInt: function (c){
-            return Math.floor(Math.random() * 15)+3;
+        confirm: function (o) {
+            this.selectedOffer = o;
+            this.showModal = false;
+            this.showConfirmModal = true;
+        },
+        randomInt: function (c) {
+            return Math.floor(Math.random() * 15) + 3;
         }
     }
 });
