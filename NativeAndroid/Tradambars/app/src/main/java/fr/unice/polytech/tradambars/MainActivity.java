@@ -10,8 +10,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import java.util.Calendar;
+
 import android.app.AlarmManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,45 +26,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Context context;
     private View mainView;
 
-    private AlarmManager alarmManager;
-    private PendingIntent alarmIntent;
-    private Calendar calendar;
-
     private Switch nightSwitch;
+
+    private static boolean isNightModeActivated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (isNightModeActivated)
+            setTheme(R.style.ActivityTheme_Primary_Base_Dark);
+        else
+            setTheme(R.style.ActivityTheme_Primary_Base_Light);
+
         setContentView(R.layout.activity_main);
         mainView = findViewById(R.id.background);
         context = this.getApplicationContext();
-        nightSwitch = findViewById(R.id.nightSwitch);
 
-        nightSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (nightSwitch.isChecked())
-                    mainView.setAlpha(1f);
-                else
-                    mainView.setAlpha(0f);
-            }
-        });
-
-        sensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
+        assert sensorManager != null;
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
-
-        /*alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-        calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 18);
-        calendar.set(Calendar.MINUTE, 0);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);*/
     }
 
     protected void onResume() {
@@ -75,16 +60,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_LIGHT)
-        {
+        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             float val = event.values[0];
-            float backgroundStatus = mainView.getAlpha();
-            if (val < 15 && backgroundStatus == 0f) { // Dark mode
-                mainView.setAlpha(1f);
-            }
-            else if (val >= 15 && backgroundStatus == 1f)
+            int light_threshold = getResources().getInteger(R.integer.light_threshold);
+            if (val < light_threshold && !isNightModeActivated || val > light_threshold*2 && isNightModeActivated)
             {
-                mainView.setAlpha(0f);
+                isNightModeActivated = !isNightModeActivated;
+                MainActivity.this.recreate();
             }
         }
     }

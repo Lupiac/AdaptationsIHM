@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Light base activity theme -->
+    <style name="ActivityTheme.Primary.Base.Light" parent="Theme.AppCompat.NoActionBar">
+        <item name="primaryTextColor">#268BD2</item>
+        <item name="secondaryTextColor">#657B83</item>
+        <item name="android:background">#F2F2F3</item>
+        <item name="dividerColor">#FDF6E3</item>
+    </style>
+
+    <!-- Dark base activity theme -->
+    <style name="ActivityTheme.Primary.Base.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="primaryTextColor">#268BD2</item>
+        <item name="secondaryTextColor">#93A1A1</item>
+        <item name="android:background">#073642</item>
+        <item name="dividerColor">#F2F2F3</item>
+    </style>
+
 </resources>
