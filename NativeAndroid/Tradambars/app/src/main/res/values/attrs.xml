@@ -7,4 +7,7 @@
         <attr name="backgroundCardColor" format="color"/>
         <attr name="iconPlaceholder" format="integer"/>
     </declare-styleable>
+    <declare-styleable name="btnFlash">
+        <attr name="btnFlashVisibility" format="string" />
+    </declare-styleable>
 </resources>

@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Tradambars</string>
     <string name="mode_nuit">Mode nuit</string>
+    <string name="permlab_flashlight">Flash</string>
     <string name="permdesc_flashlight">Autoriser l\'application a activer le flash ?</string>
+    <string name="btn_activer_flash">Activer flash</string>
+    <string name="stopFlash">Arrêter flash</string>
 </resources>

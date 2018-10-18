@@ -46,4 +46,13 @@
         android:layout_alignStart="@+id/button4"
         android:background="@drawable/caramel" />
 
+    <Button
+        android:id="@+id/btnFlash"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/btn_activer_flash"
+        />
+
 </RelativeLayout>
