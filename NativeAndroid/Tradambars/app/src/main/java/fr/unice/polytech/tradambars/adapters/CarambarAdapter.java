@@ -1,10 +1,8 @@
 package fr.unice.polytech.tradambars.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.unice.polytech.tradambars.R;
+import fr.unice.polytech.tradambars.activities.MapsActivity;
 import fr.unice.polytech.tradambars.model.Carambar;
 
 
@@ -45,6 +43,16 @@ public class CarambarAdapter extends ArrayAdapter<Carambar> {
         carambarDesc.setText(carambar.getDesc());
         carambarDesc.setTypeface(font);
         carambarImg.setImageResource(carambar.getImg());
+
+        carambarImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getContext(), MapsActivity.class);
+                myIntent.putExtra("key", "test"); //Optional parameters
+                getContext().startActivity(myIntent);
+            }
+        });
+
         // Return the completed view to render on screen
         return convertView;
     }
