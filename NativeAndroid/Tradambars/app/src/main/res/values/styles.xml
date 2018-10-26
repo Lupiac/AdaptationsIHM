@@ -10,18 +10,20 @@
 
     <!-- Light base activity theme -->
     <style name="ActivityTheme.Primary.Base.Light" parent="Theme.AppCompat.NoActionBar">
-        <item name="primaryTextColor">#268BD2</item>
+        <item name="primaryTextColor">#000000</item>
         <item name="secondaryTextColor">#657B83</item>
         <item name="android:background">#F2F2F3</item>
         <item name="dividerColor">#FDF6E3</item>
+        <item name="titleColor">#0d3d9c</item>
     </style>
 
     <!-- Dark base activity theme -->
     <style name="ActivityTheme.Primary.Base.Dark" parent="Theme.AppCompat.NoActionBar">
-        <item name="primaryTextColor">#268BD2</item>
+        <item name="primaryTextColor">#ffffff</item>
         <item name="secondaryTextColor">#93A1A1</item>
         <item name="android:background">#062931</item>
         <item name="dividerColor">#F2F2F3</item>
+        <item name="titleColor">#FFFFFF</item>
     </style>
 
 </resources>

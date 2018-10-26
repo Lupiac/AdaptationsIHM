@@ -1,13 +1,9 @@
-package fr.unice.polytech.tradambars;
+package fr.unice.polytech.tradambars.activities;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,16 +14,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.app.AlarmManager;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import fr.unice.polytech.tradambars.R;
+import fr.unice.polytech.tradambars.adapters.CarambarAdapter;
+import fr.unice.polytech.tradambars.model.Carambar;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -42,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.CAMERA}, CAMERA_REQUEST);
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         if (isNightModeActivated)
             setTheme(R.style.ActivityTheme_Primary_Base_Dark);
@@ -69,30 +68,47 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         btnFlash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isTorchLightActivated = !isTorchLightActivated;
-                try {
-                    String cameraId = cameraManager.getCameraIdList()[0];
-                    if (isTorchLightActivated)
-                    {
-                        btnFlash.setText(R.string.stopFlash);
-                        cameraManager.setTorchMode(cameraId, true);
+                if (view.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH))
+                {
+                    isTorchLightActivated = !isTorchLightActivated;
+                    try {
+                        String cameraId = cameraManager.getCameraIdList()[0];
+                        if (isTorchLightActivated)
+                        {
+                            btnFlash.setText(R.string.stopFlash);
+                            cameraManager.setTorchMode(cameraId, true);
+                        }
+                        else
+                        {
+                            btnFlash.setText(R.string.btn_activer_flash);
+                            cameraManager.setTorchMode(cameraId, false);
+                            if (!isNightModeActivated)
+                                btnFlash.setVisibility(View.INVISIBLE);
+                        }
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
                     }
-                    else
-                    {
-                        btnFlash.setText(R.string.btn_activer_flash);
-                        cameraManager.setTorchMode(cameraId, false);
-                        if (!isNightModeActivated)
-                            btnFlash.setVisibility(View.INVISIBLE);
-                    }
-                } catch (CameraAccessException e) {
-                    e.printStackTrace();
                 }
             }
         });
 
-        sensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
-        assert sensorManager != null;
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        ArrayList<Carambar> dataSet = new ArrayList<>();
+        Carambar c1 = new Carambar("Carambar Fraise", "Un super carambar à la fraise", R.drawable.fraise, 43.7, 7.2);
+        Carambar c2 = new Carambar("Carambar Cola", "Très bon très bon", R.drawable.cola, 43.6, 7.0);
+        Carambar c3 = new Carambar("Carambar Caramel", "Un carambar tout ce qu'il y a de plus classique", R.drawable.caramel, 48.8, 2.3);
+        Carambar c4 = new Carambar("Carambar Xtreme", "Un carambar extreme pour les plus braves", R.drawable.xtreme, 46.19, 6.14);
+        dataSet.add(c1);
+        dataSet.add(c2);
+        dataSet.add(c3);
+        dataSet.add(c4);
+
+        CarambarAdapter ca = new CarambarAdapter(this, dataSet);
+        ListView listView = findViewById(R.id.carambarList);
+        listView.setAdapter(ca);
+
+        TextView title = (TextView) findViewById(R.id.app_title);
+        Typeface font = Typeface.createFromAsset(getAssets(), "SignPainter_HouseScript.ttf");
+        title.setTypeface(font);
 
     }
 
@@ -111,12 +127,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (sensorManager != null)
+        {
+            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(this);
+        if (sensorManager != null)
+            sensorManager.unregisterListener(this);
     }
 
     public void onSensorChanged(SensorEvent event) {
