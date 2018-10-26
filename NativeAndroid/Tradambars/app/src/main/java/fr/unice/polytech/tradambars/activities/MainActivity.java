@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
-        //ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.CAMERA}, CAMERA_REQUEST);
-
         if (isNightModeActivated)
             setTheme(R.style.ActivityTheme_Primary_Base_Dark);
         else
@@ -95,10 +93,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
         ArrayList<Carambar> dataSet = new ArrayList<>();
-        Carambar c1 = new Carambar("Fraise", "Un super carambar à la fraise", R.drawable.fraise);
-        Carambar c2 = new Carambar("Cola", "Très bon très bon", R.drawable.cola);
-        Carambar c3 = new Carambar("Caramel", "Un carambar tout ce qu'il y a de plus classique", R.drawable.caramel);
-        Carambar c4 = new Carambar("Xtreme", "Un carambar extreme pour les plus braves", R.drawable.xtreme);
+        Carambar c1 = new Carambar("Carambar Fraise", "Un super carambar à la fraise", R.drawable.fraise, 43.7, 7.2);
+        Carambar c2 = new Carambar("Carambar Cola", "Très bon très bon", R.drawable.cola, 43.6, 7.0);
+        Carambar c3 = new Carambar("Carambar Caramel", "Un carambar tout ce qu'il y a de plus classique", R.drawable.caramel, 48.8, 2.3);
+        Carambar c4 = new Carambar("Carambar Xtreme", "Un carambar extreme pour les plus braves", R.drawable.xtreme, 46.19, 6.14);
         dataSet.add(c1);
         dataSet.add(c2);
         dataSet.add(c3);

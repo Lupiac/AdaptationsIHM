@@ -25,7 +25,7 @@ public class CarambarAdapter extends ArrayAdapter<Carambar> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Carambar carambar = getItem(position);
+        final Carambar carambar = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, parent, false);
@@ -48,7 +48,7 @@ public class CarambarAdapter extends ArrayAdapter<Carambar> {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getContext(), MapsActivity.class);
-                myIntent.putExtra("key", "test"); //Optional parameters
+                myIntent.putExtra("carambar", carambar);
                 getContext().startActivity(myIntent);
             }
         });
