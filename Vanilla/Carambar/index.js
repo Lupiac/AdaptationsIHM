@@ -37,17 +37,17 @@ function fill_carambars_options() {
 function display_search() {
     let search_element = document.getElementById("search");
     search_element.style.display = "block";
-    let content = document.getElementById("content2");
+    let content = document.getElementById("container-smartphone");
     content.style.display = "none";
 }
 
 function search() {
     let search_element = document.getElementById("search");
     search_element.style.display = "none";
-    let content = document.getElementById("content2");
-    content.style.display = "flex";
     filter();
-    display_carambars_2();
+    document.getElementById("container-smartphone").style.display = "block";
+    console.log(article_data_filter);
+    display_carambars();
 }
 
 function filter() {
@@ -102,60 +102,62 @@ function mouse_out_menu_content(elem) {
     elem.style.backgroundColor = "rgb(66, 185, 131)";
 }
 
-function display_carambars_2() {
-    let content = document.getElementById("content2");
-    content.innerHTML = '';
-    let line = document.createElement("DIV");
-    line.setAttribute("class", "line");
-    for (let i = 0; i < article_data_filter.length; i++) {
-        let article = article_data_filter[i];
-        let new_article = document.createElement("DIV");
-
-        new_article.setAttribute("class", "article2 card");
-        new_article.innerHTML = "<img class='img_article' src='../carambar.jpg' width='100px' height='100px'/>";
-        new_article.innerHTML += "<p class='name_article'>" + article.name + "</p>";
-        new_article.innerHTML += "<p class='desc-article'>" + article.desc + "</p>";
-        new_article.innerHTML += "<div class='button-article' onmouseout=\"mouse_out_menu_content(this)\" onmouseover=\"mouse_over_menu_content(this)\">" + "Voir les offres" + "</div>";
-        if (i !== 0 && i % 2 === 0) {
-            content.appendChild(line);
-            line = document.createElement("DIV");
-            line.setAttribute("class", "line");
-        }
-        line.appendChild(new_article);
-    }
-    content.append(line);
-}
-
 function display_carambars() {
-    let content = document.getElementById("content");
-    content.innerHTML = '';
-    let line = document.createElement("DIV");
-    line.setAttribute("class", "line");
-    for (let i = 0; i < article_data_filter.length; i++) {
-        let article = article_data_filter[i];
-        let new_article = document.createElement("DIV");
+    let contents = Array.prototype.slice.call(document.getElementsByClassName("container"));
+    contents.forEach(content => {
+        content.innerHTML = '';
+        let line = document.createElement("DIV");
+        line.setAttribute("class", "row margin-top");
+        for (let i = 0; i < article_data_filter.length; i++) {
+            let article = article_data_filter[i];
 
-        new_article.setAttribute("class", "article card");
-        new_article.innerHTML = "<img class='img_article' src='../carambar.jpg' width='100px' height='100px'/>";
-        new_article.innerHTML += "<p class='name_article'>" + article.name + "</p>";
-        new_article.innerHTML += "<p class='desc-article'>" + article.desc + "</p>";
-        new_article.innerHTML += "<div class='button-article' onmouseout=\"mouse_out_menu_content(this)\" onmouseover=\"mouse_over_menu_content(this)\">" + "Voir les offres" + "</div>";
-        if (i !== 0 && i % 4 === 0) {
-            content.appendChild(line);
-            line = document.createElement("DIV");
-            line.setAttribute("class", "line");
+            let new_wrapper = document.createElement("DIV");
+            new_wrapper.setAttribute("class", "col-xl-3 col-lg-4 col-md-6 col-sm-6");
+
+            let new_article = document.createElement("article-component");
+            new_article.setAttribute("open","false");
+            new_article.setAttribute("id", "article" + i.toString());
+            new_article.setAttribute("image", article.image);
+            new_article.setAttribute("description", article.desc);
+            new_article.setAttribute("name", article.name);
+
+            new_article.addEventListener("click", () => {
+                if (!is_smartphone()){                    
+                    let popup = document.getElementById("popup");
+                    popup.setAttribute("name", article.name);
+                    popup.setAttribute("description", article.desc);
+                    popup.setAttribute("img", article.image);
+                    popup.setAttribute("rating", article.rating);
+                    popup.setAttribute("offers", JSON.stringify(article.offers));
+                }else{         
+                    if (new_article.getAttribute("open") === "false"){
+                        new_article.setAttribute("rating",article.rating);
+                        new_article.setAttribute("offers",JSON.stringify(article.offers));                    
+                    }                    
+                }              
+            });
+
+            let width = document.body.clientWidth;
+            
+            let modulo = width <= SM ?1 :width <=MD ?2 :width<=LG ?3 :4;
+            if (i !== 0 && i % modulo === 0) {
+                content.appendChild(line);
+                line = document.createElement("DIV");
+                line.setAttribute("class", "row margin-top");
+            }
+
+            new_wrapper.appendChild(new_article);
+            line.appendChild(new_wrapper);
         }
-        line.appendChild(new_article);
-    }
-    content.append(line);
+        content.append(line);
+    });
 }
 
+window.onresize = () => display_carambars();
 carambarName.addEventListener("focusout", () => {
     name.removeChild(new_div);
     new_div = null;
 });
-
-
 carambarName.onkeyup = () => {
     if (name.children.length > 0 && new_div) {
         name.removeChild(new_div);
@@ -172,24 +174,6 @@ carambarName.onkeyup = () => {
         display_carambars();
     }
 };
-
-carambarName2.onkeyup = () => {
-    if (name.children.length > 0 && new_div) {
-        name.removeChild(new_div);
-        new_div = null;
-    }
-    article_data_filter = [];
-    const word = carambarName.value.toLowerCase();
-    article_data_filter = articles_data
-        .filter(article => article.name.toLowerCase().includes(word));
-    if (word.length > 0) {
-        fill_carambars_options();
-    } else {
-        article_data_filter = [].concat(articles_data);
-        display_carambars();
-    }
-};
-
 display_carambars();
 
 

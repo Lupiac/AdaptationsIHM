@@ -1,0 +1,40 @@
+.row-modal{	
+	flex-direction: row;
+}
+
+.flex-1{
+	flex:1;
+	display: flex;
+}
+
+.flex{
+	display: flex;
+}
+
+.center{
+	align-items: center;
+	justify-content: center;
+}
+
+.text-align-center{
+	text-align: center;
+}
+
+.logo-img{
+	border-radius:50%;
+    width:100px;
+    height:100px;
+    border:3px solid #42b983;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+}
+
+.offer-action button{
+	color: #42b983;
+	background-color:#fff;
+}
+
+.fake-map {
+    overflow: hidden;
+    width: 100%;
+    
+}

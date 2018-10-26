@@ -1,0 +1,15 @@
+.img_article {
+    margin: auto;
+}
+
+.button-article {
+    background-color: rgb(66, 185, 131);
+    color: white;
+    text-align: center;
+    width: 100%;
+}
+
+.offer-action button{
+	color: #42b983;
+	background-color:#fff;
+}
