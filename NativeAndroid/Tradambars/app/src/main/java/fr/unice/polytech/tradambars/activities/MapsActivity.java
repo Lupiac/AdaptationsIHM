@@ -8,12 +8,16 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         checkLocationPermission();
 
-        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -56,7 +60,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     public boolean checkLocationPermission() {
-        Log.e("COUCOU", "COUCOU");
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -132,14 +135,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng carambarPos = new LatLng(carambar.getLat(), carambar.getLng());
         mMap.addMarker(new MarkerOptions().position(carambarPos).title(carambar.getName()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(carambarPos));
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
-        }
-        else
-        {
+
+            LocationManager service = (LocationManager)
+
+                    getSystemService(LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            String provider = service.getBestProvider(criteria, false);
+            Location location = service.getLastKnownLocation(provider);
+            LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+            LatLng middle = middleBetween(userLocation, carambarPos);
+
+            float zoom = zoomFromDistance(distanceBetween(userLocation, carambarPos));
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(middle, zoom/2));
+
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(carambarPos, 16f));
             mMap.setMyLocationEnabled(false);
         }
     }
@@ -147,8 +164,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         super.onResume();
-        if (sensorManager != null)
-        {
+        if (sensorManager != null) {
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
@@ -180,4 +196,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
+
+    private LatLng middleBetween(LatLng pos1, LatLng pos2) {
+        return new LatLng((pos1.latitude + pos2.latitude) / 2, (pos1.longitude + pos2.longitude) / 2);
+    }
+
+    private float distanceBetween(LatLng pos1, LatLng pos2) {
+        float R = 6371; // Radius of the earth in km
+        double dLat = Math.toRadians((float)(pos2.latitude-pos1.latitude));  // deg2rad below
+        double dLon = Math.toRadians((float)(pos2.longitude-pos1.longitude));
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                        Math.cos(Math.toRadians(pos1.latitude)) * Math.cos(Math.toRadians(pos2.latitude)) *
+                                Math.sin(dLon/2) * Math.sin(dLon/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = R * c; // Distance in km
+        return (float)d;
+    }
+
+    private float zoomFromDistance(float distance) {
+        float minZoom = 2f;
+        float maxZoom = 16f;
+        float minDistance = 0;
+        float maxDistance = 5000;
+        if (distance > maxDistance) {
+            return minZoom;
+        }
+        return ((minZoom - maxZoom) / (maxDistance - minDistance)) * distance + maxZoom;
+    }
+
 }
