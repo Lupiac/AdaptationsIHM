@@ -4,6 +4,10 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -22,10 +26,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import fr.unice.polytech.tradambars.R;
 import fr.unice.polytech.tradambars.model.Carambar;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
     private GoogleMap mMap;
     private Carambar carambar;
+
+    private SensorManager sensorManager;
+    private Sensor lightSensor;
+    private static boolean isNightModeActivated;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -35,6 +43,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         checkLocationPermission();
+
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -114,6 +125,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        if (isNightModeActivated)
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.map_night_mode));
+
         // Add a marker in Sydney and move the camera
         LatLng carambarPos = new LatLng(carambar.getLat(), carambar.getLng());
         mMap.addMarker(new MarkerOptions().position(carambarPos).title(carambar.getName()));
@@ -132,6 +147,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         super.onResume();
+        if (sensorManager != null)
+        {
+            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
@@ -141,5 +160,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
         }
+        if (sensorManager != null)
+            sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+            float val = event.values[0];
+            int light_threshold = getResources().getInteger(R.integer.light_threshold);
+            if (val < light_threshold && !isNightModeActivated || val > light_threshold * 2 && isNightModeActivated) {
+                isNightModeActivated = !isNightModeActivated;
+                MapsActivity.this.recreate();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 }
