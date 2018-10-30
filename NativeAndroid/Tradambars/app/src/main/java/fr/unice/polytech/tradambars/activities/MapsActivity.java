@@ -11,21 +11,29 @@ import android.hardware.SensorManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.unice.polytech.tradambars.R;
 import fr.unice.polytech.tradambars.model.Carambar;
@@ -40,6 +48,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static boolean isNightModeActivated;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    private LatLng userLocation, carambarPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         Intent intent = getIntent();
         carambar = (Carambar) intent.getSerializableExtra("carambar");
+
     }
 
 
@@ -133,7 +144,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     this, R.raw.map_night_mode));
 
         // Add a marker in Sydney and move the camera
-        LatLng carambarPos = new LatLng(carambar.getLat(), carambar.getLng());
+        carambarPos = new LatLng(carambar.getLat(), carambar.getLng());
         mMap.addMarker(new MarkerOptions().position(carambarPos).title(carambar.getName()));
 
         if (ContextCompat.checkSelfPermission(this,
@@ -147,13 +158,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Criteria criteria = new Criteria();
             String provider = service.getBestProvider(criteria, false);
             Location location = service.getLastKnownLocation(provider);
-            LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
             LatLng middle = middleBetween(userLocation, carambarPos);
 
-            float zoom = zoomFromDistance(distanceBetween(userLocation, carambarPos));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(middle, 5f));
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(middle, zoom/2));
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    LatLngBounds bounds = new LatLngBounds(userLocation, carambarPos);
+                    int padding = 100;
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+                }
+            }, 1000);
+
 
         } else {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(carambarPos, 16f));
