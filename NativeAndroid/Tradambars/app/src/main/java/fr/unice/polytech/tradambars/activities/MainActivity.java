@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             float val = event.values[0];
             int light_threshold = getResources().getInteger(R.integer.light_threshold);
-            if (val < light_threshold && !isNightModeActivated || val > light_threshold * 2 && isNightModeActivated) {
+            if (val < light_threshold && !isNightModeActivated || val > light_threshold * 3 && isNightModeActivated) {
                 isNightModeActivated = !isNightModeActivated;
                 MainActivity.this.recreate();
             }

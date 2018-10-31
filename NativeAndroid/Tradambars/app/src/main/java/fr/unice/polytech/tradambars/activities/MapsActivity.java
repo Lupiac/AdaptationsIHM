@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -40,7 +41,8 @@ import fr.unice.polytech.tradambars.R;
 import fr.unice.polytech.tradambars.model.Carambar;
 import fr.unice.polytech.tradambars.tasks.DownloadTask;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        SensorEventListener, LocationListener {
 
     private GoogleMap mMap;
     private Carambar carambar;
@@ -153,15 +155,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         carambarPos = new LatLng(carambar.getLat(), carambar.getLng());
         carambarPosMarker = mMap.addMarker(new MarkerOptions().position(carambarPos).title(carambar.getName()));
+        carambarPosMarker.showInfoWindow();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
 
-            LocationManager service = (LocationManager)
-
-                    getSystemService(LOCATION_SERVICE);
+            LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
             Criteria criteria = new Criteria();
             String provider = service.getBestProvider(criteria, false);
             Location location = service.getLastKnownLocation(provider);
@@ -185,7 +186,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(middle, 5f));
 
             String dirUrl = getDirectionsUrl(userLocation, carambarPos);
-
             DownloadTask downloadTask = new DownloadTask(mMap);
             downloadTask.execute(dirUrl);
 
@@ -236,7 +236,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             float val = event.values[0];
             int light_threshold = getResources().getInteger(R.integer.light_threshold);
-            if (val < light_threshold && !isNightModeActivated || val > light_threshold * 2 && isNightModeActivated) {
+            if (val < light_threshold && !isNightModeActivated || val > light_threshold * 3 && isNightModeActivated) {
                 isNightModeActivated = !isNightModeActivated;
                 MapsActivity.this.recreate();
             }
@@ -252,28 +252,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return new LatLng((pos1.latitude + pos2.latitude) / 2, (pos1.longitude + pos2.longitude) / 2);
     }
 
-    private float distanceBetween(LatLng pos1, LatLng pos2) {
-        float R = 6371; // Radius of the earth in km
-        double dLat = Math.toRadians((float) (pos2.latitude - pos1.latitude));  // deg2rad below
-        double dLon = Math.toRadians((float) (pos2.longitude - pos1.longitude));
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(pos1.latitude)) * Math.cos(Math.toRadians(pos2.latitude)) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double d = R * c; // Distance in km
-        return (float) d;
-    }
-
-    private float zoomFromDistance(float distance) {
-        float minZoom = 2f;
-        float maxZoom = 16f;
-        float minDistance = 0;
-        float maxDistance = 5000;
-        if (distance > maxDistance) {
-            return minZoom;
-        }
-        return ((minZoom - maxZoom) / (maxDistance - minDistance)) * distance + maxZoom;
-    }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
@@ -283,5 +261,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String output = "json";
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters +
                 "&key=AIzaSyCQER8F66m6JrAsT5nOln_BQ2aFVol9oBw";
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Toast.makeText(this, "LOCATION CHANGED", Toast.LENGTH_LONG).show();
+        userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        String dirUrl = getDirectionsUrl(userLocation, carambarPos);
+        DownloadTask downloadTask = new DownloadTask(mMap);
+        downloadTask.execute(dirUrl);
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
     }
 }
