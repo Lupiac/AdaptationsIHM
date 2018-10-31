@@ -189,8 +189,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             DownloadTask downloadTask = new DownloadTask(mMap);
             downloadTask.execute(dirUrl);
 
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+            LinearLayout mapLayout = findViewById(R.id.map_layout);
+            mapLayout.post(new Runnable() {
                 @Override
                 public void run() {
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -203,8 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
                 }
-            }, 1000);
-
+            });
 
         } else {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(carambarPos, 16f));
