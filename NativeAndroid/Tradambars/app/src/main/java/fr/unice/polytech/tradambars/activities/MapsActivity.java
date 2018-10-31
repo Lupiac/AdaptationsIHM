@@ -51,6 +51,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LatLng userLocation, carambarPos;
 
+    private Marker userLocationMarker;
+    private Marker carambarPosMarker;
+    private Marker thirdCornerMarker;
+    private Marker fourthCornerMarker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         carambarPos = new LatLng(carambar.getLat(), carambar.getLng());
-        mMap.addMarker(new MarkerOptions().position(carambarPos).title(carambar.getName()));
+        carambarPosMarker = mMap.addMarker(new MarkerOptions().position(carambarPos).title(carambar.getName()));
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -162,13 +167,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             LatLng middle = middleBetween(userLocation, carambarPos);
 
+            LatLng halfDiagonal = new LatLng((userLocation.latitude - carambarPos.latitude) / 2,
+                    (userLocation.longitude - carambarPos.longitude) / 2);
+
+            final LatLng thirdCorner = new LatLng(middle.latitude - halfDiagonal.longitude,
+                    middle.longitude + halfDiagonal.latitude);
+
+            final LatLng fourthCorner = new LatLng(middle.latitude + halfDiagonal.longitude,
+                    middle.longitude - halfDiagonal.latitude);
+
+            thirdCornerMarker = mMap.addMarker(new MarkerOptions().position(thirdCorner).title(carambar.getName()).visible(false));
+            fourthCornerMarker = mMap.addMarker(new MarkerOptions().position(fourthCorner).title(carambar.getName()).visible(false));
+            userLocationMarker = mMap.addMarker(new MarkerOptions().position(userLocation).title(carambar.getName()).visible(false));
+
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(middle, 5f));
 
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    LatLngBounds bounds = new LatLngBounds(userLocation, carambarPos);
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(userLocationMarker.getPosition());
+                    builder.include(carambarPosMarker.getPosition());
+                    builder.include(thirdCornerMarker.getPosition());
+                    builder.include(fourthCornerMarker.getPosition());
+                    LatLngBounds bounds = builder.build();
                     int padding = 100;
                     mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
                 }
@@ -223,14 +246,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private float distanceBetween(LatLng pos1, LatLng pos2) {
         float R = 6371; // Radius of the earth in km
-        double dLat = Math.toRadians((float)(pos2.latitude-pos1.latitude));  // deg2rad below
-        double dLon = Math.toRadians((float)(pos2.longitude-pos1.longitude));
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                        Math.cos(Math.toRadians(pos1.latitude)) * Math.cos(Math.toRadians(pos2.latitude)) *
-                                Math.sin(dLon/2) * Math.sin(dLon/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double dLat = Math.toRadians((float) (pos2.latitude - pos1.latitude));  // deg2rad below
+        double dLon = Math.toRadians((float) (pos2.longitude - pos1.longitude));
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(pos1.latitude)) * Math.cos(Math.toRadians(pos2.latitude)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double d = R * c; // Distance in km
-        return (float)d;
+        return (float) d;
     }
 
     private float zoomFromDistance(float distance) {
