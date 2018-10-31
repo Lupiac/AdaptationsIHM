@@ -11,6 +11,7 @@ import android.hardware.SensorManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import fr.unice.polytech.tradambars.R;
 import fr.unice.polytech.tradambars.model.Carambar;
+import fr.unice.polytech.tradambars.tasks.DownloadTask;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
@@ -182,6 +184,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(middle, 5f));
 
+            String dirUrl = getDirectionsUrl(userLocation, carambarPos);
+
+            DownloadTask downloadTask = new DownloadTask(mMap);
+            downloadTask.execute(dirUrl);
+
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -193,6 +200,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     builder.include(fourthCornerMarker.getPosition());
                     LatLngBounds bounds = builder.build();
                     int padding = 100;
+
                     mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
                 }
             }, 1000);
@@ -267,4 +275,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return ((minZoom - maxZoom) / (maxDistance - minDistance)) * distance + maxZoom;
     }
 
+    private String getDirectionsUrl(LatLng origin, LatLng dest) {
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String sensor = "sensor=false";
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String output = "json";
+        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters +
+                "&key=AIzaSyCQER8F66m6JrAsT5nOln_BQ2aFVol9oBw";
+    }
 }
