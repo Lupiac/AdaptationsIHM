@@ -73,7 +73,7 @@ class Article extends HTMLElement {
             let element = currentDocument.createElement("li");
             element.setAttribute("class", "list-group-item");
             let row = currentDocument.createElement("div");
-            row.setAttribute("class", "row center");
+            row.setAttribute("class", "row center-row");
             this.generate_name(row, offer);
             this.generate_star_wrapper(row, offer);
             this.generate_euro_wrapper(row, offer);
@@ -85,13 +85,13 @@ class Article extends HTMLElement {
 
     generate_wrapper() {
         let wrapper = currentDocument.createElement("div");
-        wrapper.setAttribute("class", "text-align-center col-2");
+        wrapper.setAttribute("class", "text-align-center col-3 nopadding");
         return wrapper;
     }
 
     generate_long_wrapper() {
         let wrapper = currentDocument.createElement("div");
-        wrapper.setAttribute("class", "text-align-center col-6");
+        wrapper.setAttribute("class", "text-align-center col-4 nopadding");
         return wrapper;
     }
 
@@ -128,7 +128,7 @@ class Article extends HTMLElement {
     generate_button_wrapper(row, offer) {
         let button_wrapper = this.generate_wrapper();
         button_wrapper.setAttribute("class", "offer-action");
-        let button = currentDocument.createElement("button");
+        let button = document.createElement("button");
         button.setAttribute("class", "close btn btn-default btn-lg");
         button.setAttribute("type", "button");        
         let logo = currentDocument.createElement("i");
@@ -146,7 +146,10 @@ class Article extends HTMLElement {
                 let container = this.shadowRoot.getElementById("card__card-body");   
                 this.shadowRoot.getElementById("rating").style.display = "none";                        
                 this.shadowRoot.getElementById("sellers").style.display = "none";                
-                this.shadowRoot.getElementById("array").style.display = "none";                                
+                this.shadowRoot.getElementById("array").style.display = "none";
+                this.style.boxShadow = "";                                                         
+            }else if (is_smartphone()){
+                this.style.boxShadow = "1px 1px 12px #555";                            
             }
             this.open = !this.open;
             this.setAttribute("open",this.open.toString());
@@ -156,16 +159,22 @@ class Article extends HTMLElement {
     render() {
         const image = this.getAttribute("image");
         const description = this.getAttribute("description");
-        const name = this.getAttribute("name");
+        const name = this.getAttribute("name");        
 
         let img = this.shadowRoot.querySelector("#card__img");
+        let img_phone = this.shadowRoot.querySelector("#card__img_phone");
         img.setAttribute("src", image);
+        img_phone.setAttribute("src",image);
 
         let desc = this.shadowRoot.querySelector("#card__card-text");
+        let desc_phone = this.shadowRoot.querySelector("#card__card-text_phone")
         desc.innerHTML = description;
+        desc_phone.innerHTML = description;
 
         let header = this.shadowRoot.querySelector("#card__card-header");
+        let header_phone = this.shadowRoot.querySelector("#card__card-header_phone");
         header.innerHTML = name;
+        header_phone.innerHTML = name;
     }
 
     set_attributes() {
@@ -176,7 +185,9 @@ class Article extends HTMLElement {
     add_classes(){
         this.classList.add('card');
         this.classList.add('text-center');
-        this.classList.add('hvr-grow');
+        if (!is_smartphone()){
+            this.classList.add('hvr-grow');        
+        }        
     }
 }
 
