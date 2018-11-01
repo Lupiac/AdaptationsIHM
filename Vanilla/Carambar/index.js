@@ -60,8 +60,7 @@ function filter() {
 
 function change_category_value(elem) {
     const index = elem.options.selectedIndex;
-    category_value = elem.options[index].value;
-    console.log(category_value);
+    category_value = elem.options[index].value;    
 }
 
 function filter_by_category(elem) {
@@ -103,11 +102,11 @@ function mouse_out_menu_content(elem) {
 }
 
 function display_carambars() {
-    let contents = Array.prototype.slice.call(document.getElementsByClassName("container"));
+    let contents = Array.prototype.slice.call(document.getElementsByClassName("contenu"));
     contents.forEach(content => {
         content.innerHTML = '';
         let line = document.createElement("div");        
-        line.setAttribute("class", "row margin-top");
+        line.setAttribute("class", "row");
         for (let i = 0; i < article_data_filter.length; i++) {
             let article = article_data_filter[i];
 

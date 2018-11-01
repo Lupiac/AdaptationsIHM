@@ -8,14 +8,18 @@
 
 <!-- Computer style -->
 
-<div class="d-none d-sm-block">
+<graph-page id="graph" style="display: none"></graph-page>
+
+<div id="buy">
+    <div class="d-none d-sm-block">
     <div class="computer" id="computer">
 
         <pop-up rating="" img="" id='popup' name="" description="" rating="" offers=""></pop-up>
 
-        <div class="top">            
+        <div class="jumbotron jumbotron-fluid green">
+          <div class="container">
+            <h1 class="display-4 white-text">Tradambar</h1>   
             <div class="filter">
-
                 <div class="elem-filter">
                     <div class="carambar_name_part" id="name">
                         <input placeholder="Recherche" class="form-control" id="carambarName">
@@ -48,31 +52,21 @@
                         <option>Grand</option>
                     </select>
                 </div>
-            </div>
-        </div>
+            </div>         
+          </div>          
+        </div>  
+        
 
-        <div class="bottom">
-            <div class="options">
-                <div style="flex:1"></div>
-                <h2 class="option white-text" onmouseover="mouse_over_menu_content(this)"
-                    onmouseout="mouse_out_menu_content(this)">
-                    <img style="margin-right: 10px;" src="resources/img/buy.png" width="50px" height="50px"/><span class="d-none d-lg-block">Achats</span>                    
-                </h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <left-navigation></left-navigation>
+                </div>
+                <div class="col-9 container contenu">
 
-                <h2 class="option white-text" onmouseover="mouse_over_menu_content(this)"
-                    onmouseout="mouse_out_menu_content(this)">
-                    <img style="margin-right: 10px;" src="resources/img/catalogue.png" width="50px" height="50px"/><span class="d-none d-lg-block">Collection</span>                    
-                </h2>
-                <h2 class="option white-text" onmouseover="mouse_over_menu_content(this)"
-                    onmouseout="mouse_out_menu_content(this)">
-                    <img style="margin-right: 10px;" src="resources/img/rencontre.png" width="50px" height="50px"/><span class="d-none d-lg-block">Rencontre</span>                 
-                </h2>
-                <div style="flex:10"></div>
+                </div>
             </div>
-            <div class="container">
-
-            </div>
-        </div>
+        </div>        
     </div>
 
 </div>
@@ -171,10 +165,11 @@
     </div>
 
 
-    <div class="container not-displayed" id="container-smartphone">
+    <div class="container not-displayed contenu" id="container-smartphone">
 
     </div>
 
+</div>
 </div>
 
 <script src="utils.js" type="text/javascript"></script>
@@ -196,7 +191,11 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
       integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
+
+
+<link rel="import" href="/pages/Graph/Graph.html">
 <link rel="import" href="components/Popup/Popup.html">
+<link rel="import" href="/components/Left-Navigation/Left-Navigation.html">  
 <link rel="import" href="components/Article/Article.html">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.14/webcomponents-hi.js"></script>
 

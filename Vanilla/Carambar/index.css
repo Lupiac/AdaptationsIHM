@@ -3,7 +3,7 @@
 }
 
 .green {
-    background-color: rgb(66, 185, 131);
+    background-color: rgb(66, 185, 131) !important;
 }
 
 .white-text {
@@ -28,7 +28,7 @@
 }
 
 .top {
-    flex: 1;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     background-color: rgb(66, 185, 131);
@@ -291,4 +291,13 @@ h5 {
 
 .not-displayed{
     display: none;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.nomargin{
+    margin: 0!important;
 }

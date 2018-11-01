@@ -11,7 +11,7 @@ class Article extends HTMLElement {
             this.set_attributes();
         }      
         this.add_classes();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: 'open'});        
         const template = currentDocument.querySelector('#article-template');
         const instance = template.content.cloneNode(true);
         this.shadowRoot.appendChild(instance);
