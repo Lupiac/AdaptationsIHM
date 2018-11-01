@@ -5,6 +5,7 @@ let article_data_filter = [].concat(articles_data);
 let category_value = "Aucun";
 let edition_value = "Aucun";
 let model_value = "Aucun";
+let current_width = document.body.clientWidth;
 
 function fill_carambars_options() {
     if (article_data_filter.length > 0) {
@@ -45,8 +46,7 @@ function search() {
     let search_element = document.getElementById("search");
     search_element.style.display = "none";
     filter();
-    document.getElementById("container-smartphone").style.display = "block";
-    console.log(article_data_filter);
+    document.getElementById("container-smartphone").style.display = "block";    
     display_carambars();
 }
 
@@ -106,7 +106,7 @@ function display_carambars() {
     let contents = Array.prototype.slice.call(document.getElementsByClassName("container"));
     contents.forEach(content => {
         content.innerHTML = '';
-        let line = document.createElement("DIV");
+        let line = document.createElement("div");        
         line.setAttribute("class", "row margin-top");
         for (let i = 0; i < article_data_filter.length; i++) {
             let article = article_data_filter[i];
@@ -128,7 +128,7 @@ function display_carambars() {
                     popup.setAttribute("description", article.desc);
                     popup.setAttribute("img", article.image);
                     popup.setAttribute("rating", article.rating);
-                    popup.setAttribute("offers", JSON.stringify(article.offers));
+                    popup.setAttribute("offers", JSON.stringify(article.offers));                    
                 }else{         
                     if (new_article.getAttribute("open") === "false"){
                         new_article.setAttribute("rating",article.rating);
@@ -153,7 +153,12 @@ function display_carambars() {
     });
 }
 
-window.onresize = () => display_carambars();
+window.onresize = () => {
+    if (!is_smartphone()){
+        display_carambars();       
+    }    
+}
+
 carambarName.addEventListener("focusout", () => {
     name.removeChild(new_div);
     new_div = null;
