@@ -1,3 +1,20 @@
+currentDocument = document.currentScript.ownerDocument;
+
+class Buy extends HTMLElement {
+    constructor() {
+        super();        
+    }
+
+    connectedCallback() {                                
+        const template = currentDocument.querySelector('#buy-template');
+        const instance = template.content.cloneNode(true);
+        this.appendChild(instance);        
+    }    
+}
+
+customElements.define('buy-page', Buy);
+
+
 const carambarName = document.getElementById("carambarName");
 let name = document.getElementById("name");
 let new_div;
@@ -102,44 +119,41 @@ function mouse_out_menu_content(elem) {
 }
 
 function display_carambars() {
-    /*
-    let contents = Array.prototype.slice.call(document.getElementsByClassName("carambar_container"));
+    let contents = Array.prototype.slice.call(document.getElementsByClassName("le-conteneur"));
     contents.forEach(content => {
-        */
-    let content = document.getElementById("carambar_container");
-    content.innerHTML = '';
-    for (let i = 0; i < article_data_filter.length; i++) {
-        let article = article_data_filter[i];
+        content.innerHTML = '';
+        for (let i = 0; i < article_data_filter.length; i++) {
+            let article = article_data_filter[i];
 
-        let new_wrapper = document.createElement("DIV");
-        new_wrapper.setAttribute("class", "col-xl-3 col-lg-4 col-md-6 col-sm-6");
+            let new_wrapper = document.createElement("DIV");
+            new_wrapper.setAttribute("class", "col-xl-3 col-lg-4 col-md-6 col-sm-6");
 
-        let new_article = document.createElement("article-component");
-        new_article.setAttribute("open","false");
-        new_article.setAttribute("id", "article" + i.toString());
-        new_article.setAttribute("image", article.image);
-        new_article.setAttribute("description", article.desc);
-        new_article.setAttribute("name", article.name);
+            let new_article = document.createElement("article-component");
+            new_article.setAttribute("open","false");
+            new_article.setAttribute("id", "article" + i.toString());
+            new_article.setAttribute("image", article.image);
+            new_article.setAttribute("description", article.desc);
+            new_article.setAttribute("name", article.name);
 
-        new_article.addEventListener("click", () => {
-            if (!is_smartphone()){                    
-                let popup = document.getElementById("popup");
-                popup.setAttribute("name", article.name);
-                popup.setAttribute("description", article.desc);
-                popup.setAttribute("img", article.image);
-                popup.setAttribute("rating", article.rating);
-                popup.setAttribute("offers", JSON.stringify(article.offers));                    
-            }else{         
-                if (new_article.getAttribute("open") === "false"){
-                    new_article.setAttribute("rating",article.rating);
-                    new_article.setAttribute("offers",JSON.stringify(article.offers));                    
-                }                    
-            }              
-        });
-        new_wrapper.appendChild(new_article);
-        content.appendChild(new_wrapper);
-               
-    };
+            new_article.addEventListener("click", () => {
+                if (!is_smartphone()){                    
+                    let popup = document.getElementById("popup");
+                    popup.setAttribute("name", article.name);
+                    popup.setAttribute("description", article.desc);
+                    popup.setAttribute("img", article.image);
+                    popup.setAttribute("rating", article.rating);
+                    popup.setAttribute("offers", JSON.stringify(article.offers));                    
+                }else{         
+                    if (new_article.getAttribute("open") === "false"){
+                        new_article.setAttribute("rating",article.rating);
+                        new_article.setAttribute("offers",JSON.stringify(article.offers));                    
+                    }                    
+                }              
+            });
+            new_wrapper.appendChild(new_article);
+            content.appendChild(new_wrapper);                   
+        };
+    })
 }
 
 carambarName.addEventListener("focusout", () => {

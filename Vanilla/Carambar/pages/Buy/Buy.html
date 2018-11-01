@@ -1,0 +1,170 @@
+<template id="buy-template">
+    <style>
+        @import url("https://use.fontawesome.com/releases/v5.4.1/css/all.css");
+        @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css");
+        @import "/resources/styles/hover.css";
+        @import "/index.css";        
+    </style>
+    <div class="d-none d-sm-block">
+        <div class="computer" id="computer">
+
+            <pop-up rating="" img="" id='popup' name="" description="" rating="" offers=""></pop-up>
+
+            <div class="jumbotron jumbotron-fluid green position-fixed nopadding" style="width: 100%;top: 0;z-index: 10;">
+                <div style="margin-left: 190px">
+                    <div class="container">
+                        <h1 class="display-4 white-text">Tradambar</h1>   
+                        <div class="filter">
+                            <div class="elem-filter">
+                                <div class="carambar_name_part" id="name">
+                                    <input placeholder="Recherche" class="form-control" id="carambarName">
+                                </div>
+                            </div>
+
+                            <div class="elem-filter">
+                                <select id="categoryForm" onchange="filter_by_category(this)">
+                                    <option>Aucun</option>
+                                    <option>Fruit</option>
+                                    <option>Chocolaté</option>
+                                    <option>Spéciaux</option>
+                                </select>
+                            </div>
+
+                            <div class="elem-filter">
+                                <select id="categoryForm" onchange="filter_by_edition(this)">
+                                    <option>Aucun</option>
+                                    <option>Edition normale</option>
+                                    <option>Edition spéciale</option>
+                                    <option>Edition exceptionelle</option>
+                                </select>
+                            </div>
+
+                            <div class="elem-filter">
+                                <select id="modelForm" onchange="filter_by_model(this)">
+                                    <option>Aucun</option>
+                                    <option>Mini</option>
+                                    <option>Normal</option>
+                                    <option>Grand</option>
+                                </select>
+                            </div>
+                        </div>         
+                    </div>          
+                </div>  
+            </div>
+
+            <left-navigation style="position: fixed;margin-left: 10px;top:250px"></left-navigation>   
+
+            <div class="margin-top-jumbotron">
+                <div class="container" style="z-index: 1">
+                    <div class="row">                    
+                        <div class="container contenu">
+                            <div class="row top-space le-conteneur">
+
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+                   
+        </div>
+
+    </div>
+
+    <div class="lighten-4 d-sm-none">
+
+        <nav class="navbar green">
+
+            <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1"
+                    aria-expanded="false" aria-label="Toggle navigation"><span class=""><i
+                    class="fa fa-bars fa-1x"></i></span></button>
+
+            <a class="navbar-brand white-text" href="#">Tri des carambars</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link white-text" href="#" onmouseup="display_search()">Acheter des carambars<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link white-text" href="#">Ma collection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link white-text" href="#">Rendez-vous</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="search">    
+
+            <hr/>
+
+            <div class="form-check">
+                <h5>Catégorie de carambar</h5>
+                <div class="form-group inputRarityBlock">
+                    <select class="form-control" id="categoryForm" onchange="change_category_value(this)">
+                        <option>Aucun</option>
+                        <option>Fruit</option>
+                        <option>Chocolaté</option>
+                        <option>Spéciaux</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="form-check">
+                <h5>Modèle de carambar</h5>
+                <div class="form-group inputRarityBlock">
+                    <select class="form-control" id="modelForm" onchange="change_model_value(this)">
+                        <option>Aucun</option>
+                        <option>Mini</option>
+                        <option>Normal</option>
+                        <option>Grand</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="form-check">
+                <h5>Rareté du carambar</h5>
+                <form class="inputRarityBlock">
+                    <div class="form-check">
+                        <input class="form-check-input inputRarity" type="radio" id="huey"
+                               onmouseup="change_edition_values_martphone(this)"
+                               name="drone" value="Edition normale" checked/>
+                        <label class="form-check-label" for="huey">Edition normale</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input inputRarity" type="radio" id="dewey"
+                               onmouseup="change_edition_values_martphone(this)"
+                               name="drone" value="Edition spéciale"/>
+                        <label class="form-check-label" for="dewey">Edition spéciale</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input inputRarity" type="radio" id="louie"
+                               onmouseup="change_edition_values_martphone(this)"
+                               name="drone" value="Edition exceptionelle"/>
+                        <label class="form-check-label" for="louie">Edition exceptionelle</label>
+                    </div>
+                </form>
+
+            </div>
+
+            <hr/>
+            <div class="wrapperButton">
+                <button type="button" class="btn green white-text" onmouseup="search()">Rechercher</button>
+            </div>
+        </div>
+
+
+        <div class="container not-displayed contenu le-conteneur" id="container-smartphone">
+
+        </div>
+
+    </div>
+</template>
+<script src="Buy.js"></script>

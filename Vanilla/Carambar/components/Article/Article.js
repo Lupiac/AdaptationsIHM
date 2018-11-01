@@ -3,7 +3,7 @@ currentDocument = document.currentScript.ownerDocument;
 class Article extends HTMLElement {
     constructor() {
         super();
-        this.open = false;
+        this.open = false;        
     }
 
     connectedCallback() {           
@@ -16,7 +16,7 @@ class Article extends HTMLElement {
         const instance = template.content.cloneNode(true);
         this.shadowRoot.appendChild(instance);
         this.add_event_listener();
-        this.render();
+        this.render();        
     }
 
     bring_back_button(){
@@ -148,8 +148,6 @@ class Article extends HTMLElement {
                 this.shadowRoot.getElementById("sellers").style.display = "none";                
                 this.shadowRoot.getElementById("array").style.display = "none";
                 this.style.boxShadow = "";                                                         
-            }else if (is_smartphone()){
-                this.style.boxShadow = "1px 1px 12px #555";                            
             }
             this.open = !this.open;
             this.setAttribute("open",this.open.toString());
@@ -182,12 +180,14 @@ class Article extends HTMLElement {
         this.setAttribute("data-target","#popup");
     }
 
-    add_classes(){
+    add_classes(){        
         this.classList.add('card');
         this.classList.add('text-center');
         if (!is_smartphone()){
             this.classList.add('hvr-grow');        
-        }        
+        }else{
+            this.style.marginBottom = "5px";
+        }       
     }
 }
 

@@ -10,167 +10,7 @@
 
 <graph-page id="graph" style="display: none"></graph-page>
 
-<div id="buy">
-    <div class="d-none d-sm-block">
-    <div class="computer" id="computer">
-
-        <pop-up rating="" img="" id='popup' name="" description="" rating="" offers=""></pop-up>
-
-        <div class="jumbotron jumbotron-fluid green">
-          <div class="container">
-            <h1 class="display-4 white-text">Tradambar</h1>   
-            <div class="filter">
-                <div class="elem-filter">
-                    <div class="carambar_name_part" id="name">
-                        <input placeholder="Recherche" class="form-control" id="carambarName">
-                    </div>
-                </div>
-
-                <div class="elem-filter">
-                    <select id="categoryForm" onchange="filter_by_category(this)">
-                        <option>Aucun</option>
-                        <option>Fruit</option>
-                        <option>Chocolaté</option>
-                        <option>Spéciaux</option>
-                    </select>
-                </div>
-
-                <div class="elem-filter">
-                    <select id="categoryForm" onchange="filter_by_edition(this)">
-                        <option>Aucun</option>
-                        <option>Edition normale</option>
-                        <option>Edition spéciale</option>
-                        <option>Edition exceptionelle</option>
-                    </select>
-                </div>
-
-                <div class="elem-filter">
-                    <select id="modelForm" onchange="filter_by_model(this)">
-                        <option>Aucun</option>
-                        <option>Mini</option>
-                        <option>Normal</option>
-                        <option>Grand</option>
-                    </select>
-                </div>
-            </div>         
-          </div>          
-        </div>  
-        
-
-        <div class="container">
-            <div class="row">
-                <div class="col-3">
-                    <left-navigation></left-navigation>
-                </div>
-                <div class="col-9 container contenu">
-
-                </div>
-            </div>
-        </div>        
-    </div>
-
-</div>
-
-
-<!-- Smartphone style -->
-
-<div class="lighten-4 d-sm-none">
-
-    <nav class="navbar green">
-
-        <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1"
-                aria-expanded="false" aria-label="Toggle navigation"><span class=""><i
-                class="fa fa-bars fa-1x"></i></span></button>
-
-        <a class="navbar-brand white-text" href="#">Tri des carambars</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link white-text" href="#" onmouseup="display_search()">Acheter des carambars<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link white-text" href="#">Ma collection</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link white-text" href="#">Rendez-vous</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div id="search">    
-
-        <hr/>
-
-        <div class="form-check">
-            <h5>Catégorie de carambar</h5>
-            <div class="form-group inputRarityBlock">
-                <select class="form-control" id="categoryForm" onchange="change_category_value(this)">
-                    <option>Aucun</option>
-                    <option>Fruit</option>
-                    <option>Chocolaté</option>
-                    <option>Spéciaux</option>
-                </select>
-            </div>
-        </div>
-
-        <hr/>
-
-        <div class="form-check">
-            <h5>Modèle de carambar</h5>
-            <div class="form-group inputRarityBlock">
-                <select class="form-control" id="modelForm" onchange="change_model_value(this)">
-                    <option>Aucun</option>
-                    <option>Mini</option>
-                    <option>Normal</option>
-                    <option>Grand</option>
-                </select>
-            </div>
-        </div>
-
-        <hr/>
-
-        <div class="form-check">
-            <h5>Rareté du carambar</h5>
-            <form class="inputRarityBlock">
-                <div class="form-check">
-                    <input class="form-check-input inputRarity" type="radio" id="huey"
-                           onmouseup="change_edition_values_martphone(this)"
-                           name="drone" value="Edition normale" checked/>
-                    <label class="form-check-label" for="huey">Edition normale</label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input inputRarity" type="radio" id="dewey"
-                           onmouseup="change_edition_values_martphone(this)"
-                           name="drone" value="Edition spéciale"/>
-                    <label class="form-check-label" for="dewey">Edition spéciale</label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input inputRarity" type="radio" id="louie"
-                           onmouseup="change_edition_values_martphone(this)"
-                           name="drone" value="Edition exceptionelle"/>
-                    <label class="form-check-label" for="louie">Edition exceptionelle</label>
-                </div>
-            </form>
-
-        </div>
-
-        <hr/>
-        <div class="wrapperButton">
-            <button type="button" class="btn green white-text" onmouseup="search()">Rechercher</button>
-        </div>
-    </div>
-
-
-    <div class="container not-displayed contenu" id="container-smartphone">
-
-    </div>
-
-</div>
-</div>
+<buy-page id="buy"></div>
 
 <script src="utils.js" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -183,7 +23,6 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 <script type="text/javascript" src="data.js"></script>
-<script type="text/javascript" src="index.js"></script>
 <link type="text/css" href="resources/styles/hover.css" rel="stylesheet">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
       integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
@@ -194,6 +33,7 @@
 
 
 <link rel="import" href="/pages/Graph/Graph.html">
+<link rel="import" href="/pages/Buy/Buy.html">
 <link rel="import" href="components/Popup/Popup.html">
 <link rel="import" href="/components/Left-Navigation/Left-Navigation.html">  
 <link rel="import" href="components/Article/Article.html">

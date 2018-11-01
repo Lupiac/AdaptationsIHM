@@ -2,6 +2,15 @@
     height: 100vh;
 }
 
+.margin-top-jumbotron{
+    margin-top: 250px;
+    margin-left: 190px;
+}
+
+.top-space div{
+    margin-bottom: 20px;
+}
+
 .green {
     background-color: rgb(66, 185, 131) !important;
 }
