@@ -1,29 +1,31 @@
 package fr.unice.polytech.tradambars.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,9 +35,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import fr.unice.polytech.tradambars.R;
 import fr.unice.polytech.tradambars.model.Carambar;
@@ -49,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private SensorManager sensorManager;
     private Sensor lightSensor;
-    private static boolean isNightModeActivated;
+    private static boolean isNightModeActivated = false;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -59,6 +58,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker carambarPosMarker;
     private Marker thirdCornerMarker;
     private Marker fourthCornerMarker;
+
+    private static boolean isTorchLightActivated = false;
+
+    private Button btnFlashMaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         Intent intent = getIntent();
         carambar = (Carambar) intent.getSerializableExtra("carambar");
+
+        final CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+        btnFlashMaps = findViewById(R.id.btnFlashMaps);
+
+        if (isNightModeActivated)
+            btnFlashMaps.setVisibility(View.VISIBLE);
+        else {
+            btnFlashMaps.setVisibility(View.INVISIBLE);
+        }
+
+        btnFlashMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+                    try {
+                        String cameraId = cameraManager.getCameraIdList()[0];
+                        if (!isTorchLightActivated) {
+                            cameraManager.setTorchMode(cameraId, true);
+                            btnFlashMaps.getBackground().setTint(Color.parseColor("#FFFFFF"));
+                        } else {
+                            cameraManager.setTorchMode(cameraId, false);
+                            btnFlashMaps.getBackground().setTint(Color.parseColor("#888888"));
+                            if (!isNightModeActivated)
+                                btnFlashMaps.setVisibility(View.INVISIBLE);
+                        }
+                        isTorchLightActivated = !isTorchLightActivated;
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
     }
 
@@ -185,7 +221,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             DownloadTask downloadTask = new DownloadTask(mMap);
             downloadTask.execute(dirUrl);
 
-            LinearLayout mapLayout = findViewById(R.id.map_layout);
+            FrameLayout mapLayout = findViewById(R.id.map_layout);
             mapLayout.post(new Runnable() {
                 @Override
                 public void run() {
@@ -228,19 +264,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-            float val = event.values[0];
-            int light_threshold = getResources().getInteger(R.integer.light_threshold);
-            if (val < light_threshold && !isNightModeActivated)
-            {
-                isNightModeActivated = !isNightModeActivated;
-                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
-                        this, R.raw.map_night_mode));
-            }
-            else if (val > light_threshold * 3 && isNightModeActivated) {
-                isNightModeActivated = !isNightModeActivated;
-                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
-                        this, R.raw.map_default_mode));
+        if (mMap != null) {
+            if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                float val = event.values[0];
+                int light_threshold = getResources().getInteger(R.integer.light_threshold);
+                if (val < light_threshold && !isNightModeActivated) {
+                    isNightModeActivated = !isNightModeActivated;
+                    mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.map_night_mode));
+                    btnFlashMaps.setVisibility(View.VISIBLE);
+                } else if (val > light_threshold * 3 && isNightModeActivated) {
+                    isNightModeActivated = !isNightModeActivated;
+                    mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.map_default_mode));
+                    if (!isTorchLightActivated)
+                        btnFlashMaps.setVisibility(View.INVISIBLE);
+                }
             }
         }
     }
