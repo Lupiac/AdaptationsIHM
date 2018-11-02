@@ -3,12 +3,15 @@ package fr.unice.polytech.tradambars.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -47,9 +50,24 @@ public class CarambarAdapter extends ArrayAdapter<Carambar> {
         carambarImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(getContext(), MapsActivity.class);
-                myIntent.putExtra("carambar", carambar);
-                getContext().startActivity(myIntent);
+                boolean connected = false;
+                ConnectivityManager connectivityManager = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                    //we are connected to a network
+                    connected = true;
+                }
+                else
+                    connected = false;
+                if (connected) {
+                    Intent myIntent = new Intent(getContext(), MapsActivity.class);
+                    myIntent.putExtra("carambar", carambar);
+                    getContext().startActivity(myIntent);
+                }
+                else
+                {
+                    Toast.makeText(getContext(),"Connection internet non disponible", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
