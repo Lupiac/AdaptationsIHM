@@ -135,6 +135,7 @@
     flex: 5;
     display: flex;
     flex-direction: row;
+    margin-bottom: 5px;
 }
 
 .elem-filter {
@@ -285,7 +286,7 @@ h5 {
 }
 
 .top-popup {
-    display: flex;
+    display: flex;filter
     height: 10%;
 }
 

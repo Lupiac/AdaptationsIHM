@@ -19,9 +19,9 @@ const carambarName = document.getElementById("carambarName");
 let name = document.getElementById("name");
 let new_div;
 let article_data_filter = [].concat(articles_data);
-let category_value = "Aucun";
-let edition_value = "Aucun";
-let model_value = "Aucun";
+let category_value = "Catégorie";
+let edition_value = "Edition";
+let model_value = "Modèle";
 let current_width = document.body.clientWidth;
 
 function fill_carambars_options() {
@@ -68,9 +68,9 @@ function search() {
 }
 
 function filter() {
-    article_data_filter = articles_data.filter(article => (article.category === category_value || category_value === "Aucun")
-        && (article.edition === edition_value || edition_value === "Aucun")
-        && (article.model === model_value || model_value === "Aucun"));
+    article_data_filter = articles_data.filter(article => (article.category === category_value || category_value === "Catégorie")
+        && (article.edition === edition_value || edition_value === "Edition")
+        && (article.model === model_value || model_value === "Modèle"));
     display_carambars();
 }
 
