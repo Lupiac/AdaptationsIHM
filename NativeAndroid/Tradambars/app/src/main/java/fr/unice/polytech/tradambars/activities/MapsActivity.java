@@ -148,10 +148,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (isNightModeActivated)
-            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.map_night_mode));
-
         // Add a marker in Sydney and move the camera
         carambarPos = new LatLng(carambar.getLat(), carambar.getLng());
         carambarPosMarker = mMap.addMarker(new MarkerOptions().position(carambarPos).title(carambar.getName()));
@@ -235,9 +231,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             float val = event.values[0];
             int light_threshold = getResources().getInteger(R.integer.light_threshold);
-            if (val < light_threshold && !isNightModeActivated || val > light_threshold * 3 && isNightModeActivated) {
+            if (val < light_threshold && !isNightModeActivated)
+            {
                 isNightModeActivated = !isNightModeActivated;
-                MapsActivity.this.recreate();
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                        this, R.raw.map_night_mode));
+            }
+            else if (val > light_threshold * 3 && isNightModeActivated) {
+                isNightModeActivated = !isNightModeActivated;
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                        this, R.raw.map_default_mode));
             }
         }
     }
