@@ -15,4 +15,5 @@
     <string name="tradambars">Tradambars</string>
     <string name="carambar_image">Carambar Image</string>
     <string name="title_activity_maps" tools:ignore="ExtraTranslation">Map</string>
+    <string name="flashlight">flashlight</string>
 </resources>

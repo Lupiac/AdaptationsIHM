@@ -1,7 +1,12 @@
 package fr.unice.polytech.tradambars.activities;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
@@ -10,11 +15,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.view.View;
@@ -40,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         if (isNightModeActivated)
@@ -50,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         setContentView(R.layout.activity_main);
 
-        final CameraManager cameraManager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
+        final CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
 
         final Button btnFlash = findViewById(R.id.btnFlash);
 
@@ -68,18 +76,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         btnFlash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (view.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH))
-                {
+                if (view.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
                     isTorchLightActivated = !isTorchLightActivated;
                     try {
                         String cameraId = cameraManager.getCameraIdList()[0];
-                        if (isTorchLightActivated)
-                        {
+                        if (isTorchLightActivated) {
                             btnFlash.setText(R.string.stopFlash);
                             cameraManager.setTorchMode(cameraId, true);
-                        }
-                        else
-                        {
+                        } else {
                             btnFlash.setText(R.string.btn_activer_flash);
                             cameraManager.setTorchMode(cameraId, false);
                             if (!isNightModeActivated)
@@ -118,8 +122,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             case CAMERA_REQUEST:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                }
-                else {
+                } else {
                     Toast.makeText(this, "Permission refusée pour le flash", Toast.LENGTH_LONG).show();
                 }
         }
@@ -127,8 +130,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     protected void onResume() {
         super.onResume();
-        if (sensorManager != null)
-        {
+        if (sensorManager != null) {
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
