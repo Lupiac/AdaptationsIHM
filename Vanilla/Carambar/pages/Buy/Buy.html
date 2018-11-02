@@ -1,6 +1,5 @@
 <template id="buy-template">
-    <style>
-        @import url("https://use.fontawesome.com/releases/v5.4.1/css/all.css");
+    <style>        
         @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css");
         @import "/resources/styles/hover.css";
         @import "/index.css";        
@@ -83,10 +82,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent1">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link white-text" href="#" onmouseup="display_search()">Acheter des carambars<span class="sr-only">(current)</span></a>
+                        <div class="nav-link white-text" onclick="display_buy()">Acheter des carambars</div>                        
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link white-text" href="#">Ma collection</a>
+                        <div class="nav-link white-text" onclick="display_graph()">Informations sur les carambars</div>                        
                     </li>
                     <li class="nav-item">
                         <a class="nav-link white-text" href="#">Rendez-vous</a>

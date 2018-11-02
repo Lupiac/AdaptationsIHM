@@ -177,3 +177,19 @@ carambarName.onkeyup = () => {
     }
 };
 display_carambars();
+
+
+function display_buy(){    
+    let buy_element = document.getElementById("buy");
+    let graph_element = document.getElementById("graph");
+    buy_element.style.display = "block";
+    graph_element.style.display = "none";
+    display_search();
+}
+
+function display_graph(){
+    let buy_element = document.getElementById("buy");
+    let graph_element = document.getElementById("graph");
+    buy_element.style.display = "none";
+    graph_element.style.display = "block";
+}

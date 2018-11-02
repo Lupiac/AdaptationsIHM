@@ -1,6 +1,3 @@
-.full-body {
-    height: 100vh;
-}
 
 .margin-top-jumbotron{
     margin-top: 250px;
@@ -19,67 +16,13 @@
     color: white;
 }
 
-.title-parent {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .computer {
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
-.menu-content {
-    flex: 5
-}
-
-.top {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-    background-color: rgb(66, 185, 131);
-}
-
-.bottom {
-    flex: 7;
-    display: flex;
-    flex-direction: row;
-}
-
-.allo{
-    margin:auto;
-}
-
-.options {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(66, 185, 131);
-}
-
-.option {
-    text-align: center;
-    flex: 1;
-    padding: 10px;
-}
-
-.content {
-    flex: 5;
-    display: flex;
-    flex-direction: column;
-}
-
 .article {
-    align-items: center;
-}
-
-.article2 {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
     align-items: center;
 }
 
@@ -310,4 +253,22 @@ h5 {
 
 .nomargin{
     margin: 0!important;
+}
+
+
+.center-total{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;   
+}
+
+.chevron{
+    text-align: center;    
+}
+
+.indications{
+    font-size: 18px;
+    font-style: italic;
+    text-align: center;
 }
