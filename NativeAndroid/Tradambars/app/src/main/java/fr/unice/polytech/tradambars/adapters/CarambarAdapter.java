@@ -52,13 +52,10 @@ public class CarambarAdapter extends ArrayAdapter<Carambar> {
             public void onClick(View view) {
                 boolean connected = false;
                 ConnectivityManager connectivityManager = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-                if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-                    //we are connected to a network
                     connected = true;
                 }
-                else
-                    connected = false;
                 if (connected) {
                     Intent myIntent = new Intent(getContext(), MapsActivity.class);
                     myIntent.putExtra("carambar", carambar);
