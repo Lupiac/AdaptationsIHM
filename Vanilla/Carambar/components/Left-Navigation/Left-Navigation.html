@@ -1,0 +1,13 @@
+<template id="left-navigation-template">
+    <style>
+        @import url("https://use.fontawesome.com/releases/v5.4.1/css/all.css");
+        @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css");
+        @import "/components/Left-Navigation/Left-Navigation.css";
+    </style>
+    <div class="nav flex-column nav-pills green" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <div onmouseover="change_cursor(this)" onclick="open_buy()" id="buy-link" class="nav-link white-text hvr-grow" ><img style="margin-right: 10px;" src="/resources/img/buy.png" width="50px" height="50px"/>Achats</div>
+      <div onmouseover="change_cursor(this)" onclick="open_graph()" id="data-link" class="nav-link white-text hvr-grow"><img style="margin-right: 10px;" src="/resources/img/catalogue.png" width="50px" height="50px"/>Informations</div>
+      <div class="nav-link white-text" href=""><img style="margin-right: 10px;" src="/resources/img/rencontre.png" width="50px" height="50px"/>Rencontre</div>      
+    </div>    
+</template>
+<script src="Left-Navigation.js"></script>

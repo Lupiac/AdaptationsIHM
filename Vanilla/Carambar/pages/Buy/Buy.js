@@ -1,10 +1,28 @@
+currentDocument = document.currentScript.ownerDocument;
+
+class Buy extends HTMLElement {
+    constructor() {
+        super();        
+    }
+
+    connectedCallback() {                                
+        const template = currentDocument.querySelector('#buy-template');
+        const instance = template.content.cloneNode(true);
+        this.appendChild(instance);        
+    }    
+}
+
+customElements.define('buy-page', Buy);
+
+
 const carambarName = document.getElementById("carambarName");
 let name = document.getElementById("name");
 let new_div;
 let article_data_filter = [].concat(articles_data);
-let category_value = "Aucun";
-let edition_value = "Aucun";
-let model_value = "Aucun";
+let category_value = "Catégorie";
+let edition_value = "Edition";
+let model_value = "Modèle";
+let current_width = document.body.clientWidth;
 
 function fill_carambars_options() {
     if (article_data_filter.length > 0) {
@@ -45,23 +63,21 @@ function search() {
     let search_element = document.getElementById("search");
     search_element.style.display = "none";
     filter();
-    document.getElementById("container-smartphone").style.display = "block";
-    console.log(article_data_filter);
+    document.getElementById("container-smartphone").style.display = "block";    
     display_carambars();
 }
 
 function filter() {
-    article_data_filter = articles_data.filter(article => (article.category === category_value || category_value === "Aucun")
-        && (article.edition === edition_value || edition_value === "Aucun")
-        && (article.model === model_value || model_value === "Aucun"));
+    article_data_filter = articles_data.filter(article => (article.category === category_value || category_value === "Catégorie")
+        && (article.edition === edition_value || edition_value === "Edition")
+        && (article.model === model_value || model_value === "Modèle"));
     display_carambars();
 }
 
 
 function change_category_value(elem) {
     const index = elem.options.selectedIndex;
-    category_value = elem.options[index].value;
-    console.log(category_value);
+    category_value = elem.options[index].value;    
 }
 
 function filter_by_category(elem) {
@@ -103,11 +119,9 @@ function mouse_out_menu_content(elem) {
 }
 
 function display_carambars() {
-    let contents = Array.prototype.slice.call(document.getElementsByClassName("container"));
+    let contents = Array.prototype.slice.call(document.getElementsByClassName("le-conteneur"));
     contents.forEach(content => {
         content.innerHTML = '';
-        let line = document.createElement("DIV");
-        line.setAttribute("class", "row margin-top");
         for (let i = 0; i < article_data_filter.length; i++) {
             let article = article_data_filter[i];
 
@@ -128,7 +142,7 @@ function display_carambars() {
                     popup.setAttribute("description", article.desc);
                     popup.setAttribute("img", article.image);
                     popup.setAttribute("rating", article.rating);
-                    popup.setAttribute("offers", JSON.stringify(article.offers));
+                    popup.setAttribute("offers", JSON.stringify(article.offers));                    
                 }else{         
                     if (new_article.getAttribute("open") === "false"){
                         new_article.setAttribute("rating",article.rating);
@@ -136,24 +150,12 @@ function display_carambars() {
                     }                    
                 }              
             });
-
-            let width = document.body.clientWidth;
-            
-            let modulo = width <= SM ?1 :width <=MD ?2 :width<=LG ?3 :4;
-            if (i !== 0 && i % modulo === 0) {
-                content.appendChild(line);
-                line = document.createElement("DIV");
-                line.setAttribute("class", "row margin-top");
-            }
-
             new_wrapper.appendChild(new_article);
-            line.appendChild(new_wrapper);
-        }
-        content.append(line);
-    });
+            content.appendChild(new_wrapper);                   
+        };
+    })
 }
 
-window.onresize = () => display_carambars();
 carambarName.addEventListener("focusout", () => {
     name.removeChild(new_div);
     new_div = null;
@@ -175,5 +177,3 @@ carambarName.onkeyup = () => {
     }
 };
 display_carambars();
-
-

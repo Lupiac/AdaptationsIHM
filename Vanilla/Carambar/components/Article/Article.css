@@ -13,3 +13,35 @@
 	color: #42b983;
 	background-color:#fff;
 }
+
+.center{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.center-row{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;	
+}
+
+.description{
+	color: gray;
+	font-size: 12px;
+}
+
+.article{
+	box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+}
+
+.padding-1{
+	padding:1px;
+	border-right: 1px inset rgb(211,211,211);
+}
+
+.margin-bottom{
+	margin-bottom: 20px;
+}

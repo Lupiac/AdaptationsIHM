@@ -2,8 +2,17 @@
     height: 100vh;
 }
 
+.margin-top-jumbotron{
+    margin-top: 250px;
+    margin-left: 190px;
+}
+
+.top-space div{
+    margin-bottom: 20px;
+}
+
 .green {
-    background-color: rgb(66, 185, 131);
+    background-color: rgb(66, 185, 131) !important;
 }
 
 .white-text {
@@ -28,7 +37,7 @@
 }
 
 .top {
-    flex: 1;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     background-color: rgb(66, 185, 131);
@@ -126,6 +135,7 @@
     flex: 5;
     display: flex;
     flex-direction: row;
+    margin-bottom: 5px;
 }
 
 .elem-filter {
@@ -276,7 +286,7 @@ h5 {
 }
 
 .top-popup {
-    display: flex;
+    display: flex;filter
     height: 10%;
 }
 
@@ -291,4 +301,13 @@ h5 {
 
 .not-displayed{
     display: none;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.nomargin{
+    margin: 0!important;
 }
