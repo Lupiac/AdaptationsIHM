@@ -3,7 +3,7 @@ currentDocument = document.currentScript.ownerDocument;
 class CarouselImage extends HTMLElement {
     constructor() {
         super();      
-        this.number = 0;       
+        this.number = 0;           
     }
 
     connectedCallback() {     
@@ -12,6 +12,7 @@ class CarouselImage extends HTMLElement {
         const instance = template.content.cloneNode(true);
         this.shadowRoot.appendChild(instance);         
         this.setComportement();
+        this.addEventListener("active",event=>event.stopPropagation(),true);
     }   
 
     setComportement(){    

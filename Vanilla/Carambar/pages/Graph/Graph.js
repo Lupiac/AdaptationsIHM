@@ -9,7 +9,17 @@ class Graph extends HTMLElement {
         const template = currentDocument.querySelector('#graph-template');
         const instance = template.content.cloneNode(true);
         this.appendChild(instance);
-        this.active_swipe();         
+        this.active_swipe(); 
+        this.listener_indicator_swipe();          
+    }    
+
+    listener_indicator_swipe(){
+    	let swipe = document.getElementById("balaye");
+    	swipe.addEventListener("click",()=>{
+    		let carous = document.getElementById("carous");
+    		carous.classList.add("movement");
+    		setTimeout(()=>carous.classList.remove("movement"),1500);
+    	})
     }    
 
     active_swipe(){
@@ -67,5 +77,8 @@ function active_graphs(){
 	videos.setAttribute("class","col-6 nopadding center-total not-active-bottom");
 }
 
+function make_movement(){
+
+}
 
 customElements.define('graph-page', Graph);
