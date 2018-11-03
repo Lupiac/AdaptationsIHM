@@ -2,6 +2,11 @@
 	margin-bottom: 20px;
 }
 
+.carousel-footer{
+	width: 100%;
+	height: 7vh;
+}
+
 .margin-top-jumbotron{
 	margin-top: 250px;
 	margin-left: 190px;
@@ -9,4 +14,68 @@
 
 .white-text{
 	color: white;
+}
+
+.footer{
+	position: fixed;
+	z-index: 12;
+	left: 0;
+	bottom: 0;
+	width: 100%;	
+	align-items: center;
+	justify-content: center;	
+}
+
+.box {
+	border: 1px solid #ccc;
+}
+
+.all {
+	box-shadow: 0 0 5px #333;
+}
+
+.active-bottom{
+	background-color: rgb(66, 185, 131);
+	color: white;
+}
+
+.not-active-bottom{
+	background-color: white;
+	color: rgb(66, 185, 131);
+}
+
+.movement{	
+    animation: swing 1s ease;    
+    animation-iteration-count: 1;
+}
+
+@keyframes swing
+{
+    33%
+    {
+        -webkit-transform: translateX(50%);
+        transform: translateX(50%);
+    }    
+   66%{
+		-webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+   }
+    100%
+    {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+}
+
+.margin-top-carousel{
+	
+}
+
+.pimped li{
+	background-color: rgb(66, 185, 131) !important;
+	
+}
+
+.pimped .active{
+	background-color: white !important;
 }
