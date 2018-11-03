@@ -1,76 +1,86 @@
 <template id="graph-template">
-	<style>		
+    <style>
         @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css");
         @import "/resources/styles/hover.css";
         @import "/index.css";
         @import "/pages/Graph/Graph.css";
-	</style>	
+    </style>
 
-	<div class="d-none d-sm-block">
+    <div class="d-none d-sm-block">
 
-		<div class="jumbotron jumbotron-fluid green position-fixed nopadding" style="width: 100%;top: 0;z-index: 10;">		
-			<div style="margin-left: 190px">
-				<div class="container">
-		    		<h1 class="display-4 white-text">Tradambar</h1>
-		    		<p class="lead white-text">Analyse du carambar Titeuf</p>
-	    			<ul class="nav nav-tabs" id="myTab" role="tablist">
-	    				<li class="nav-item">
-					    	<a class="nav-link white-text active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Vidéos</a>
-					  	</li>
-					  	<li class="nav-item">
-					    	<a class="nav-link white-text" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Graphiques</a>
-					  	</li>	  
-					</ul>
-		  		</div>	
-		  	</div>  
-		</div>
+        <div class="jumbotron jumbotron-fluid green position-fixed nopadding" style="width: 100%;top: 0;z-index: 10;">
+            <div style="margin-left: 190px">
+                <div class="container">
+                    <h1 class="display-4 white-text">Tradambar</h1>
+                    <p class="lead white-text">Analyse du carambar Titeuf</p>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link white-text active" id="home-tab" data-toggle="tab" href="#home"
+                               role="tab" aria-controls="home" aria-selected="true">Vidéos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link white-text" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                               aria-controls="profile" aria-selected="false">Graphiques</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-		<left-navigation style="position: fixed;margin-left: 10px"></left-navigation>	
+        <left-navigation style="position: fixed;margin-left: 10px"></left-navigation>
 
-		<div class="margin-top-jumbotron">
-			<div class="container" style="z-index: 1">
-				<div class="row">					
-					<div class="tab-content" id="myTabContent">
-					  	<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-					  		<div class="container">
-					  			<div class="row">
-					  				<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
-					  					<iframe height="350" width="100%" src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
-					  				</div>				  			
-					  				<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
-					  					<iframe height="350" width="100%" src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
-					  				</div>	
-					  				<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
-					  					<iframe height="350" width="100%" src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
-					  				</div>	
-						  			<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
-						  				<iframe height="350" width="100%" src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
-						  			</div>	
-						  			<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
-						  				<iframe height="350" width="100%" src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
-						  			</div>	
-						  			<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
-						  				<iframe height="350" width="100%" src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
-						  			</div>	
-						  			<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
-						  				<iframe height="350" width="100%" src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
-						  			</div>	
-						  			<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
-						  				<iframe height="350" width="100%" src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
-						  			</div>					  										
-					  			</div>
-					  		</div>				  	
-					  	</div>
-					  	<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">				  	
-					  	</div>				  
-					</div>				
-				</div>
-			</div>	
-		</div>
-	</div>
+        <div class="margin-top-jumbotron">
+            <div class="container" style="z-index: 1">
+                <div class="row">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
+                                        <iframe height="350" width="100%"
+                                                src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
+                                        <iframe height="350" width="100%"
+                                                src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
+                                        <iframe height="350" width="100%"
+                                                src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
+                                        <iframe height="350" width="100%"
+                                                src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
+                                        <iframe height="350" width="100%"
+                                                src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
+                                        <iframe height="350" width="100%"
+                                                src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
+                                        <iframe height="350" width="100%"
+                                                src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 marg">
+                                        <iframe height="350" width="100%"
+                                                src="https://www.youtube.com/embed/Uah4iiTa8k8"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-	<div class="lighten-4 d-sm-none">
+    <div class="lighten-4 d-sm-none">
 
         <nav class="navbar green">
 
@@ -83,55 +93,83 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent2">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <div class="nav-link white-text" onclick="display_buy()">Acheter des carambars</div>                        
+                        <div class="nav-link white-text" onclick="display_buy()">Acheter des carambars</div>
                     </li>
                     <li class="nav-item">
-                        <div class="nav-link white-text" onclick="display_graph()">Informations sur les carambars</div>                        
+                        <div class="nav-link white-text" onclick="display_graph()">Informations sur les carambars</div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link white-text" href="#">Rendez-vous</a>
                     </li>
                 </ul>
             </div>
-        </nav>    
+        </nav>
 
-        <div id="carous" data-interval="false" class="carousel slide" data-ride="carousel">     
-        	<div class="carousel-inner">
-	    		<div class="carousel-item active">	
-	    			<h3 style="color: rgb(66, 185, 131);padding: 10px; text-align: center;border-bottom-color: rgb(233, 236, 239);border-bottom-style: solid;border-bottom-width: 1px;">Vidéos</h3>			      		
-  					<carousel-component></carousel-component>
-	  			</div>
-	  			<div class="carousel-item">	
-	    			<h3 style="color: rgb(66, 185, 131);padding: 10px; text-align: center;border-bottom-color: rgb(233, 236, 239);border-bottom-style: solid;border-bottom-width: 1px;">Photos</h3>			      				      		
-  					<carousel-image-component></carousel-image-component>
-	  			</div>
-  			</div>	  		
-  			<div id="balaye" class="indications text-green margin-top-carousel">
-  				<i class="fas fa-angle-double-left"></i>  				
-  				<i class="fas fa-angle-double-left"></i>
-  				<i class="fas fa-angle-double-left"></i>
-  				<i class="fas fa-angle-double-left"></i>
-  				Changer de catégorie
-  				<i class="fas fa-angle-double-right"></i>
-  				<i class="fas fa-angle-double-right"></i>
-  				<i class="fas fa-angle-double-right"></i>  				
-  				<i class="fas fa-angle-double-right"></i>
-  			</div>
-		</div>			    			    
-       	    
-		<div class="footer box">
-			<div class="container">
-				<div class="row" style="height: 10vh">
-					<div id="bottom-videos" onclick="active_videos()" class="col-6 nopadding center-total active-bottom">
-						<div>Médias</div>
-					</div>
-					<div id="bottom-graphs" onclick="active_graphs()" class="col-6 nopadding center-total not-active-bottom">
-						<div>Graphiques</div>
-					</div>
-				</div>
-			</div>
-		</div>
+        <div id="medias-container">
+            <div id="carous" data-interval="false" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <h3 style="color: rgb(66, 185, 131);padding: 10px; text-align: center;border-bottom-color: rgb(233, 236, 239);border-bottom-style: solid;border-bottom-width: 1px;">
+                            Vidéos</h3>
+                        <carousel-component></carousel-component>
+                    </div>
+                    <div class="carousel-item">
+                        <h3 style="color: rgb(66, 185, 131);padding: 10px; text-align: center;border-bottom-color: rgb(233, 236, 239);border-bottom-style: solid;border-bottom-width: 1px;">
+                            Photos</h3>
+                        <carousel-image-component></carousel-image-component>
+                    </div>
+                </div>
+                <div id="balaye" class="indications text-green margin-top-carousel">
+                    <i class="fas fa-angle-double-left"></i>
+                    <i class="fas fa-angle-double-left"></i>
+                    <i class="fas fa-angle-double-left"></i>
+                    <i class="fas fa-angle-double-left"></i>
+                    Changer de catégorie
+                    <i class="fas fa-angle-double-right"></i>
+                    <i class="fas fa-angle-double-right"></i>
+                    <i class="fas fa-angle-double-right"></i>
+                    <i class="fas fa-angle-double-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <div id="graphs-container" style="display: none;">
+            <div class="container">
+                <div class="row">
+                    <div id="left-select" class="col-1 center-total nopadding">
+                        <i class="fas fa-chevron-left fa-3x text-green"></i>
+                    </div>
+
+                    <div class="col-10 nopadding">
+                        <img id="image0" style="width: 100%" height="300" src="https://user.oc-static.com/files/263001_264000/263999.png">
+                        <img id="image1" style="display: none;width: 100%" height="300" src="https://support.content.office.net/fr-fr/media/c957b99e-083e-4443-afc6-c372ea43ed08.png">
+                        <img id="image2" style="display: none;width: 100%" height="300" src="data:image/png;base64,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">
+                    </div>
+
+                    <div id="right-select" class="col-1 center-total nopadding">
+                        <i class="fas fa-chevron-right fa-3x text-green"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer box">
+            <div class="container">
+                <div class="row" style="height: 10vh">
+                    <div id="bottom-medias" onclick="active_videos()"
+                         class="col-6 nopadding center-total active-bottom">
+                        <div>Médias</div>
+                    </div>
+                    <div id="bottom-graphs" onclick="active_graphs()"
+                         class="col-6 nopadding center-total not-active-bottom">
+                        <div>Graphiques</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
-	
+
 </template>
 <script src="Graph.js"></script>
