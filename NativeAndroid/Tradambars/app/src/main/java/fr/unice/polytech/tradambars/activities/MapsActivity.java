@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -48,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private SensorManager sensorManager;
     private Sensor lightSensor;
-    private static boolean isNightModeActivated = false;
+    private boolean isNightModeActivated = false;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 

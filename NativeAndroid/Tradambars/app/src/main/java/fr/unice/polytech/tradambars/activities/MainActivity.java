@@ -58,44 +58,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         setContentView(R.layout.activity_main);
 
-        final CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-
-        final Button btnFlash = findViewById(R.id.btnFlash);
-
-        if (isTorchLightActivated)
-            btnFlash.setText(R.string.stopFlash);
-        else
-            btnFlash.setText(R.string.btn_activer_flash);
-
-        if (isNightModeActivated || isTorchLightActivated)
-            btnFlash.setVisibility(View.VISIBLE);
-        else
-            btnFlash.setVisibility(View.INVISIBLE);
-
-
-        btnFlash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-                    isTorchLightActivated = !isTorchLightActivated;
-                    try {
-                        String cameraId = cameraManager.getCameraIdList()[0];
-                        if (isTorchLightActivated) {
-                            btnFlash.setText(R.string.stopFlash);
-                            cameraManager.setTorchMode(cameraId, true);
-                        } else {
-                            btnFlash.setText(R.string.btn_activer_flash);
-                            cameraManager.setTorchMode(cameraId, false);
-                            if (!isNightModeActivated)
-                                btnFlash.setVisibility(View.INVISIBLE);
-                        }
-                    } catch (CameraAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
         ArrayList<Carambar> dataSet = new ArrayList<>();
         Carambar c1 = new Carambar("Carambar Fraise", "Un super carambar à la fraise", R.drawable.fraise, 43.7, 7.2);
         Carambar c2 = new Carambar("Carambar Cola", "Très bon très bon", R.drawable.cola, 43.6, 7.0);
