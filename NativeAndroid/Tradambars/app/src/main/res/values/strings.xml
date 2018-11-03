@@ -16,4 +16,6 @@
     <string name="carambar_image">Carambar Image</string>
     <string name="title_activity_maps" tools:ignore="ExtraTranslation">Map</string>
     <string name="flashlight">flashlight</string>
+    <string name="_1_km">1 KM</string>
+    <string name="_100_km">100 KM</string>
 </resources>

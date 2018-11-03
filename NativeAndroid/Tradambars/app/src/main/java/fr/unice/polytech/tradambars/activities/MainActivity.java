@@ -1,33 +1,18 @@
 package fr.unice.polytech.tradambars.activities;
 
-import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
-import android.os.SystemClock;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +27,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor lightSensor;
 
     private static boolean isNightModeActivated = false;
-    private static boolean isTorchLightActivated = false;
+
+    private SeekBar radius;
+    private TextView radius_value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +44,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             setTheme(R.style.ActivityTheme_Primary_Base_Light);
 
         setContentView(R.layout.activity_main);
+
+        radius_value = findViewById(R.id.radius_value);
+        radius = findViewById(R.id.radius_seekbar);
+        radius_value.setText("Rayon de recherche: "+radius.getProgress()+" KM");
+        radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                radius.setProgress(i);
+                radius_value.setText("Rayon de recherche: "+i+" KM");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         ArrayList<Carambar> dataSet = new ArrayList<>();
         Carambar c1 = new Carambar("Carambar Fraise", "Un super carambar à la fraise", R.drawable.fraise, 43.7, 7.2);
@@ -73,8 +81,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         listView.setAdapter(ca);
 
         TextView title = (TextView) findViewById(R.id.app_title);
-        Typeface font = Typeface.createFromAsset(getAssets(), "SignPainter_HouseScript.ttf");
-        title.setTypeface(font);
+        Typeface titleFont = Typeface.createFromAsset(getAssets(), "SignPainter_HouseScript.ttf");
+        title.setTypeface(titleFont);
+
+        Typeface textFont = Typeface.createFromAsset(getAssets(), "Lato-Light.ttf");
+        radius_value.setTypeface(textFont);
 
     }
 
