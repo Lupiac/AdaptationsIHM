@@ -52,9 +52,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         Carambar c1 = new Carambar("Carambar Fraise", "Un super carambar à la fraise", R.drawable.fraise, 43.7, 7.2);
         Carambar c2 = new Carambar("Carambar Cola", "Très bon très bon", R.drawable.cola, 43.6, 7.0);
-        Carambar c3 = new Carambar("Carambar Caramel", "Un carambar tout ce qu'il y a de plus classique", R.drawable.caramel, 48.8, 2.3);
-        Carambar c4 = new Carambar("Carambar Xtreme", "Un carambar extreme pour les plus braves", R.drawable.xtreme, 46.19, 6.14);
-        ArrayList<Carambar> dataSet = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
+        Carambar c3 = new Carambar("Carambar Caramel", "Un carambar tout ce qu'il y a de plus classique", R.drawable.caramel, 43.628013, 7.072654);
+        Carambar c4 = new Carambar("Carambar Xtreme", "Un carambar extreme pour les plus braves", R.drawable.xtreme, 43.638647, 7.0674645);
+
+        ArrayList<Carambar> dataSet = new ArrayList<>();
+
+        dataSet.add(c1);
+        dataSet.add(c2);
+        dataSet.add(c3);
+        dataSet.add(c4);
+
+        String[] gouts = {"Abricot","Ananas","Banane","Canneberge","Cassis","Cerise","Châtaigne","Citron","Clémentine",
+                "Figue","Framboise","Grenade","Groseille","Kiwi","Lime",
+                "Mandarine","Melon","Mûre","Myrtille","Orange","Pamplemousse","Pastèque","Pêche","Brugnon","Nectarine",
+                "Poire","Pomme","Raisin"};
+
+        final float minLat, maxLat, minLng, maxLng;
+        maxLat = 44.070207f;
+        minLng = 6.204297f;
+        minLat = 43.687713f;
+        maxLng = 7.337721f;
+
+        for (int i = 0; i < 50; i++) {
+            float lat = (float)(minLat + Math.random() * (maxLat - minLat));
+            float lng = (float)(minLng + Math.random() * (maxLng - minLng));
+            dataSet.add(new Carambar("Carambar "+gouts[i%(gouts.length-1)], "Une description vraiment bien", R.drawable.xtreme, lat, lng));
+        }
 
         Collections.sort(dataSet, new Comparator<Carambar>() {
             @Override
