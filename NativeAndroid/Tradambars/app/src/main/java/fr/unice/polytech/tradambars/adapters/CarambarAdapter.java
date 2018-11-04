@@ -10,7 +10,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import fr.unice.polytech.tradambars.R;
@@ -30,71 +35,106 @@ import fr.unice.polytech.tradambars.model.Carambar;
 import static android.content.Context.LOCATION_SERVICE;
 
 
-public class CarambarAdapter extends ArrayAdapter<Carambar> {
-    public CarambarAdapter(Context context, ArrayList<Carambar> users) {
+public class CarambarAdapter extends RecyclerView.Adapter<CarambarAdapter.ViewHolder> {
+
+    /*public CarambarAdapter(Context context, ArrayList<Carambar> users) {
         super(context, 0, users);
+    }*/
+
+    private ArrayList<Carambar> carambarList = new ArrayList<>();
+    private ArrayList<Carambar> filteredCarambarList = new ArrayList<>();
+    private Context context;
+
+    public CarambarAdapter(Context context, ArrayList<Carambar> carambarList) {
+        this.carambarList = carambarList;
+        this.filteredCarambarList = new ArrayList<Carambar>();
+        this.filteredCarambarList.addAll(carambarList);
+        this.context = context;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
+        ViewHolder holder = new ViewHolder(view);
+        return holder;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
-        final Carambar carambar = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, parent, false);
-        }
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        final Carambar carambar = filteredCarambarList.get(position);
 
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationManager service = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            String provider = service.getBestProvider(criteria, false);
-            Location location = service.getLastKnownLocation(provider);
-            LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            LatLng carambarLocation = new LatLng(carambar.getLat(), carambar.getLng());
-            Toast.makeText(getContext(),""+distance(userLocation,carambarLocation), Toast.LENGTH_LONG).show();
-        }
-
-        // Lookup view for data population
-        TextView carambarName = (TextView) convertView.findViewById(R.id.carambarName);
-        TextView carambarDesc = (TextView) convertView.findViewById(R.id.carambarDesc);
-        ImageView carambarImg = (ImageView) convertView.findViewById(R.id.carambarImg);
-
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "Lato-Light.ttf");
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "Lato-Light.ttf");
 
         // Populate the data into the template view using the data object
-        carambarName.setText(carambar.getName());
-        carambarName.setTypeface(font, Typeface.BOLD);
-        carambarDesc.setText(carambar.getDesc());
-        carambarDesc.setTypeface(font);
-        carambarImg.setImageResource(carambar.getImg());
+        holder.carambarName.setText(carambar.getName());
+        holder.carambarName.setTypeface(font, Typeface.BOLD);
+        holder.carambarDesc.setText(carambar.getDesc());
+        holder.carambarDesc.setTypeface(font);
+        holder.carambarImg.setImageResource(carambar.getImg());
 
-        carambarImg.setOnClickListener(new View.OnClickListener() {
+        holder.carambarImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean connected = false;
-                ConnectivityManager connectivityManager = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
                     connected = true;
                 }
                 if (connected) {
-                    Intent myIntent = new Intent(getContext(), MapsActivity.class);
+                    Intent myIntent = new Intent(context, MapsActivity.class);
                     myIntent.putExtra("carambar", carambar);
-                    getContext().startActivity(myIntent);
+                    context.startActivity(myIntent);
                 }
                 else
                 {
-                    Toast.makeText(getContext(),"Connection internet non disponible", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"Connection internet non disponible", Toast.LENGTH_LONG).show();
                 }
             }
         });
-
-        // Return the completed view to render on screen
-        return convertView;
     }
 
+    @Override
+    public int getItemCount() {
+        return filteredCarambarList.size();
+    }
+
+    public void updateView(int radius) {
+        this.filteredCarambarList.clear();
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            for (Carambar c : carambarList) {
+                LocationManager service = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+                Criteria criteria = new Criteria();
+                String provider = service.getBestProvider(criteria, false);
+                Location location = service.getLastKnownLocation(provider);
+                LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLng carambarLocation = new LatLng(c.getLat(), c.getLng());
+
+                int distance = (int)distance(userLocation, carambarLocation);
+                if (distance <= radius*1000) {
+                    this.filteredCarambarList.add(c);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView carambarName;
+        TextView carambarDesc;
+        ImageView carambarImg;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            carambarName = (TextView) itemView.findViewById(R.id.carambarName);
+            carambarDesc = (TextView) itemView.findViewById(R.id.carambarDesc);
+            carambarImg = (ImageView) itemView.findViewById(R.id.carambarImg);
+        }
+    }
 
     /**
      * Function from https://stackoverflow.com/questions/8832071/how-can-i-get-the-distance-between-two-point-by-latlng
