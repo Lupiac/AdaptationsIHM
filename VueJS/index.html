@@ -2,40 +2,54 @@
 <head>
     <title>carambibi</title>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
 
 </head>
 
 <body>
 
 <div class="title" id="title">
-    {{ title }}
+    Carambibi
 </div>
 
 <div class="container">
 
-    <div id="market">
+    <div id="app">
 
         <div class="filter row btn-toolbar">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Rechercher" aria-label="Rechercher" aria-describedby="basic-addon2">
+            <div class="input-group ftr">
+                <input type="text" class="form-control" v-model="searchInput"
+                       v-on:input="search()" placeholder="Rechercher" aria-label="Rechercher"
+                       aria-describedby="basic-addon2">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary search-btn" type="button"> <i class="fas fa-search"></i></button>
+                    <button class="btn btn-outline-secondary search-btn" type="button" v-on:click="search()"><i
+                            class="fas fa-search"></i></button>
                 </div>
             </div>
-            <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Catégorie
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Au fruits</a>
-                    <a class="dropdown-item" href="#">Au caramel</a>
-                    <a class="dropdown-item" href="#">Qui pique</a>
-                </div>
+            <div class="ftr">
+                <select id="selectCategory" v-on:change="filter($event.target.value)">
+                    <option selected="selected" value="all">Toutes les catégories</option>
+                    <optgroup label="Goûts">
+                        <option value="fruit">Fruits
+                        <option value="caramel">Caramel
+                        <option value="other">Autre
+                    </optgroup>
+                    <optgroup label="Taille">
+                        <option value="mini">Mini
+                        <option value="normal">Normal
+                    </optgroup>
+                </select>
             </div>
+
+
         </div>
 
         <ul class="items">
@@ -43,7 +57,7 @@
 
                 <item>
                     <div slot="img">
-                        <img class="card-img-top" v-bind:src="carambar.image" />
+                        <img class="card-img-top" v-bind:src="carambar.image"/>
                     </div>
                     <div slot="title">
                         {{ carambar.name}}
@@ -52,19 +66,51 @@
                         {{carambar.desc}}
                     </div>
                     <div slot="action">
-                        <a href="#" class="btn btn-primary" v-on:click="show(carambar)">Voir les offres ({{carambar.offers.length}})</a>
+                        <a href="#" class="btn btn-primary" v-on:click="show(carambar)"
+                           data-toggle="tooltip" data-placement="bottom" title="Offres"
+                           data-delay='{"show":"120", "hide":"0"}'
+
+                        >
+                            <i class="fas fa-shopping-cart"></i>
+                            ({{carambar.offers.length}})</a>
+                        <a href="#" class="btn btn-primary" v-on:click="detail(carambar)"
+                           data-toggle="tooltip" data-placement="bottom" title="Détails"
+                           data-delay='{"show":"120", "hide":"0"}'><i class="fas fa-info-circle"></i></a>
                     </div>
                 </item>
 
             </li>
         </ul>
 
+        <ul class="mobile-items">
+            <li v-for="carambar in carambars">
+                <mobile-item>
+
+                    <div slot="img">
+                        <img class="card-img-top" v-bind:src="carambar.image"/>
+                    </div>
+                    <div slot="title">
+                        <div class="mtitle">{{ carambar.name}}</div>
+                        <div class="mdesc">{{ carambar.desc}}</div>
+                    </div>
+                    <div slot="action">
+                        <div class="row">
+                            <button class="col-5" v-on:click="detail(carambar)"><i class="fas fa-info-circle"></i>
+                            </button>
+                            <button class="col-5" v-on:click="show(carambar)"><i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </mobile-item>
+            </li>
+        </ul>
+
         <modal v-if="showModal" @close="showModal = false">
             <h3 slot="header">{{ selectedCarambar.name}}</h3>
 
-            <div slot="desc">
-                <div>{{ selectedCarambar.desc}}</div>
-                <div class="modal-rating">
+            <div slot="desc" class="modaldesc">
+                <div class="t1">{{ selectedCarambar.desc}}</div>
+                <div class="modal-rating t2">
                         <span v-for="n in 5">
                 <img v-if="n <= selectedCarambar.rating"
                      src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-512.png"/>
@@ -72,14 +118,14 @@
                      src="https://cdn4.iconfinder.com/data/icons/sports-technology-and-people/1000/2-01-512.png"/>
               </span>
                 </div>
-                <div>{{ selectedCarambar.offers.length}} vendeurs à proximité</div>
+                <div class="t3">{{ selectedCarambar.offers.length}} vendeurs à proximité</div>
             </div>
 
-            <div slot="img">
-                <img class="modal-img" v-bind:src="selectedCarambar.image" />
+            <div slot="img" class="modalimg">
+                <img class="modal-img" v-bind:src="selectedCarambar.image"/>
             </div>
 
-            <div slot="offers">
+            <div slot="offers" class="hide-xs">
                 <ul class="list-group mt-5">
                     <li v-for="offer in selectedCarambar.offers" class="list-group-item">
 
@@ -88,7 +134,7 @@
                             <div class="col-3">
                                 <u>{{offer.user}}</u>
                             </div>
-                            <div class="col-5">
+                            <div class="col-5 ">
                                 <div class="distance">
                                     <i class="fas fa-map-marker-alt"></i> À {{randomInt()}} km de vous
                                 </div>
@@ -102,7 +148,7 @@
                             </div>
                             <div class="col-2 offer-action">
                                 <button type="button" class="btn btn-default btn-lg"
-                                v-on:click="confirm(offer)">
+                                        v-on:click="confirm(offer)">
                                     <i class="fas fa-shopping-cart"></i>
                                 </button>
                             </div>
@@ -111,21 +157,163 @@
                     </li>
                 </ul>
             </div>
+            <div slot="offers" class="show-xs offers-mobile">
+                <ul class="mt-5">
+                    <li v-for="offer in selectedCarambar.offers">
+                        <div class="row">
+                            <div class="col-9">
+                                <h4><b>{{offer.user}}</b> (à {{randomInt()}} km)</h4>
+                                <h5><span class="colortxt">{{offer.price}}</span> € / g. Note moyenne : <span
+                                        class="colortxt">{{offer.rating}}</span> / 5</h5>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-default btn-lg"
+                                        v-on:click="confirm(offer)">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </modal>
+
+        <modal v-if="showDetailsModal" @close="showDetailsModal = false">
+            <h3 slot="header">Informations</h3>
+
+            <div slot="img" style="display: none"></div>
+            <div slot="desc" style="display: none"></div>
+            <div slot="footer" style="display: none"></div>
+            <div slot="offers">
+                <div id="buttonBar">
+                    <button class="btno active" v-on:click="toggleDetails('all')"><i class="fas fa-align-center"></i>
+                        Tout montrer
+                    </button>
+                    <button class="btno" v-on:click="toggleDetails('stats')"><i class="fas fa-chart-bar"></i>
+                        Statistiques
+                    </button>
+                    <button class="btno" v-on:click="toggleDetails('map')"><i class="fas fa-map-marker-alt"></i> Carte
+                    </button>
+                    <button class="btno" v-on:click="toggleDetails('history')"><i class="fas fa-landmark"></i> Anecdotes
+                    </button>
+                </div>
+                <div class="btn-group center" id="buttonBarMobile">
+                    <button class="btno btn-primary btn" v-on:click="toggleDetails('all')"><i
+                            class="fas fa-align-center"></i>
+                    </button>
+                    <button class="btno btn btn-primary" v-on:click="toggleDetails('map')"><i
+                            class="fas fa-map-marker-alt"></i>
+                    </button>
+                    <button class="btno btn btn-primary" v-on:click="toggleDetails('stats')"><i
+                            class="fas fa-chart-bar"></i>
+                    </button>
+                    <button class="btno btn btn-primary" v-on:click="toggleDetails('history')"><i
+                            class="fas fa-landmark"></i>
+                    </button>
+                </div>
+                <div class="grid">
+                    <div class="row">
+                        <div class="col-12 col-sm-5 box" v-if="detailsContent.includes('stats')">
+                            <div class="content">
+                                Dans les années 1960, un Carambar coûtait cinq centimes de franc.
+                                Aujourd'hui, il est commercialisé au prix de 15 centimes d'euros.
+                                Ainsi, en l'espace de 40 ans, son prix a été multiplié par près de 20.
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 box statsimg" v-if="detailsContent.includes('stats')">
+                            <img src="https://www.sec.gov/Archives/edgar/data/744473/000115697308000330/u53441x9x2.jpg"/>
+                            <h4>Courbe qui ressemble à un truc pro</h4>
+                        </div>
+                    </div>
+                    <div class="row" v-if="detailsContent.includes('map')">
+                        <div class="gmap box">
+                            <iframe width="100%" height="170"
+                                    src="https://maps.google.com/maps?width=100%&amp;height=250&amp;hl=en&amp;coord=43.621280, 7.102411&amp;q=43.631907%2C%207.126588+(carambibi)&amp;ie=UTF8&amp;t=&amp;z=13&amp;iwloc=B&amp;output=embed"
+                                    frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-12 col-sm-6 box" v-if="detailsContent.includes('history')">
+                            <div class="content iglist">
+                                <h4>Ingrédients du Carambar :</h4>
+                                <ul>
+                                    <li>Sirop de glucose et sucre</li>
+                                    <li>Lait écrémé concentré sucré</li>
+                                    <li>Sucre</li>
+                                    <li>Huile de coprah hydrogénée</li>
+                                    <li>Cacao maigre en poudre</li>
+                                    <li>Arôme artificiel</li>
+                                    <li>Gélatine</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-5 box" v-if="detailsContent.includes('history')">
+                            <div class="content">
+                                Le premier Carambar a été créé en 1954 à Marcq-en-Barœul par monsieur Fauchille, dans
+                                l’usine du Chocolat Delespaul-Havez.
+                                Une machine déréglée aurait donné naissance à cette confiserie. Cette machine aurait
+                                fabriqué du caramel en barres, d'où l'origine du nom Caram’Bar.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </modal>
 
         <modal v-if="showConfirmModal" @close="showConfirmModal = false">
-            <h3 slot="header">Confirmation de rendez-vous avec <i>{{ selectedOffer.user}}</i></h3>
-            <div slot="img">
-                <img class="fake-map"
-                     src="https://iphonesoft.fr/images/_122012/google_maps_donnees_localisation.jpg"/>
+            <h3 slot="header">Rendez-vous avec <i>{{ selectedOffer.user}}</i></h3>
+            <div slot="img" style="display: none;"></div>
+            <div slot="desc" style="display: none;"></div>
+
+            <div slot="offers" v-if="userlogged" class="champ">
+                <div class="loguser">
+                    <span>logged ?</span>
+                    <input type="checkbox" id="checkbox" value="unchecked" v-model="userlogged">
+                </div>
+                <iframe width="100%" height="170"
+                        src="https://maps.google.com/maps?width=100%&amp;height=250&amp;hl=en&amp;coord=43.621280, 7.102411&amp;q=43.631907%2C%207.126588+(carambibi)&amp;ie=UTF8&amp;t=&amp;z=13&amp;iwloc=B&amp;output=embed"
+                        frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                <button class="btn btn-primary">
+                    Ouvrir dans l'application
+                </button>
+                <p>Votre rendez-vous est disponible sur votre compte. Utilisez l'application
+                mobile pour vous rendre au tiequar.</p>
             </div>
 
-            <div slot="desc">
-                <p>Téléchargez l'application pour vous laisser guider jusqu'au bas des blocs</p>
-                <img height="100px" src="https://h24-original.s3.amazonaws.com/120041/22642034-Wrt29.jpg"/>
-                <img height="100px" src="http://azonmobile.com/cms/system_direct_files/qrcodes/b76170dabe4189bdd2acf273224955fb432906f8f3bad3907b38451f2dd7949e.png"/>
+            <div slot="offers" v-if="!userlogged">
+                <div class="loguser">
+                    <span>logged ?</span>
+                    <input type="checkbox" id="checkbox" value="unchecked" v-model="userlogged">
+                </div>
+
+                <p>Créez un compte et téléchargez l'application Carambibi pour vous laisser guider jusqu'au bas des
+                    blocs.</p>
+                <div class="row hide-xs lmao">
+                    <div class="col-4 text-center">
+                        <img height="100px" src="https://h24-original.s3.amazonaws.com/120041/22642034-Wrt29.jpg"/>
+                    </div>
+                    <div class="col-4">
+                        <img height="100px" class="pl-3"
+                             src="http://azonmobile.com/cms/system_direct_files/qrcodes/b76170dabe4189bdd2acf273224955fb432906f8f3bad3907b38451f2dd7949e.png"/>
+                    </div>
+                    <div class="col-4 connectbtn">
+                        <button class="btn btn-primary">Créer un compte</button>
+                        <button class="btn btn-primary">Se connecter</button>
+
+                    </div>
+                </div>
+                <div class="row show-xs tezzr">
+                    <div class="left">
+                        <img height="100px" src="https://h24-original.s3.amazonaws.com/120041/22642034-Wrt29.jpg"/>
+                    </div>
+                    <div class="right connectbtn">
+                        <button class="btn btn-primary">Créer un compte</button>
+                        <button class="btn btn-primary">Se connecter</button>
+                    </div>
+                </div>
+
             </div>
-            <div slot="offers"></div>
         </modal>
 
     </div>
@@ -157,7 +345,27 @@
             </slot>
         </div>
     </div>
+</script>
 
+<script type="text/template" id="mobile-item-template">
+    <div class="row">
+        <div class="mimg col-2">
+            <slot name="img">
+                default img
+            </slot>
+        </div>
+        <div class="mcard-title col-6">
+            <slot name="title">
+                default name
+            </slot>
+        </div>
+
+        <div class="card-bottom col-4">
+            <slot name="action">
+                <a>default action</a>
+            </slot>
+        </div>
+    </div>
 </script>
 
 
@@ -165,16 +373,18 @@
     <transition name="modal">
         <div class="modal-mask">
             <div class="modal-wrapper">
-                <div class="modal-container row">
+                <div class="modal-container ">
 
-                    <div class="modal-header col-11">
-                        <slot name="header">
-                            default header
-                        </slot>
-                    </div>
+                    <div class="row">
+                        <div class="modal-header col-10">
+                            <slot name="header">
+                                default header
+                            </slot>
+                        </div>
 
-                    <div class="modal-close col-1">
-                        <button @click="$emit('close')">X</button>
+                        <div class="modal-close col-2">
+                            <button @click="$emit('close')">X</button>
+                        </div>
                     </div>
 
                     <div class="modal-body">
@@ -186,7 +396,6 @@
                             </div>
                             <div class="col-4">
                                 <slot name="img">
-                                    default img
                                 </slot>
                             </div>
                         </div>
@@ -197,23 +406,33 @@
                             </slot>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <slot name="footer">
-                        </slot>
-                    </div>
                 </div>
             </div>
         </div>
     </transition>
 </script>
 
+
 <script type="text/javascript" src="data.js"></script>
 <script type="text/javascript" src="script.js"></script>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-<link href='https://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous">
+</script>
+
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+</script>
+
 </body>
 
 </html>
