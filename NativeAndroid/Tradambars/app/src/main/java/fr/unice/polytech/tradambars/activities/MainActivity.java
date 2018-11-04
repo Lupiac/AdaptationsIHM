@@ -1,16 +1,23 @@
 package fr.unice.polytech.tradambars.activities;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +26,8 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import fr.unice.polytech.tradambars.R;
 import fr.unice.polytech.tradambars.adapters.CarambarAdapter;
@@ -45,7 +54,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Carambar c2 = new Carambar("Carambar Cola", "Très bon très bon", R.drawable.cola, 43.6, 7.0);
         Carambar c3 = new Carambar("Carambar Caramel", "Un carambar tout ce qu'il y a de plus classique", R.drawable.caramel, 48.8, 2.3);
         Carambar c4 = new Carambar("Carambar Xtreme", "Un carambar extreme pour les plus braves", R.drawable.xtreme, 46.19, 6.14);
-        ArrayList<Carambar> dataSet = new ArrayList<>(Arrays.asList(c1,c2,c3,c4));
+        ArrayList<Carambar> dataSet = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
+
+        Collections.sort(dataSet, new Comparator<Carambar>() {
+            @Override
+            public int compare(Carambar c1, Carambar c2) {
+                if (ContextCompat.checkSelfPermission(getBaseContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+                    Criteria criteria = new Criteria();
+                    String provider = service.getBestProvider(criteria, false);
+                    Location location = service.getLastKnownLocation(provider);
+                    LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    return -Float.compare(c2.distance(userLocation), c1.distance(userLocation));
+                }
+                else
+                    return 0;
+            }
+        });
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -61,12 +88,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         radius_value = findViewById(R.id.radius_value);
         radius = findViewById(R.id.radius_seekbar);
-        radius_value.setText("Rayon de recherche: "+radius.getProgress()+" KM");
+        radius_value.setText("Rayon de recherche: " + radius.getProgress() + " KM");
         radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 radius.setProgress(i);
-                radius_value.setText("Rayon de recherche: "+i+" KM");
+                radius_value.setText("Rayon de recherche: " + i + " KM");
                 ca.updateView(i);
             }
 
