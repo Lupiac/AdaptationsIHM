@@ -236,7 +236,7 @@ class Map extends React.Component {
 
     },
       (error) => alert(JSON.stringify(error)),
-      { enableHighAccuracy: true, timeout: 20000})
+      { enableHighAccuracy: true, timeout: 20000 })
 
     this.watchID = navigator.geolocation.watchPosition((position) => {
       var lat = parseFloat(position.coords.latitude)
@@ -264,7 +264,6 @@ class Map extends React.Component {
       this.setState({ markerPosition: lastRegion })
 
     })
-    //.customMapStyle = this.darkTheme();
 
 
   }
@@ -311,32 +310,32 @@ class Map extends React.Component {
     console.log("ClearTheme " + !this.props.screenProps.nightMode);
     console.log("customstyle: " + this.darkTheme());
     return (
-      <View style={{flex:1}}>
-      <View style={styles.container}>
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          customMapStyle={this.darkTheme()}
-          region={this.state.initialPosition}
-          showsUserLocation zoomEnabled={true}>
-          <MapView.Marker coordinate={destination}>
-            <View style={styles.radius}>
-              <View style={styles.marker} />
-            </View>
-          </MapView.Marker>
-          <MapViewDirections
-            origin={{ latitude: this.state.initialPosition.latitude, longitude: this.state.initialPosition.longitude }}
-            destination={destination}
-            apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={3}
-            strokeColor="hotpink"
-            mode="driving"
-          />
-        </MapView>
+      <View style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            customMapStyle={this.darkTheme()}
+            region={this.state.initialPosition}
+            showsUserLocation zoomEnabled={true}>
+            <MapView.Marker coordinate={destination}>
+              <View style={styles.radius}>
+                <View style={styles.marker} />
+              </View>
+            </MapView.Marker>
+            <MapViewDirections
+              origin={{ latitude: this.state.initialPosition.latitude, longitude: this.state.initialPosition.longitude }}
+              destination={destination}
+              apikey={GOOGLE_MAPS_APIKEY}
+              strokeWidth={3}
+              strokeColor="hotpink"
+              mode="driving"
+            />
+          </MapView>
+        </View>
+        {this._renderCancel()}
       </View>
-      {this._renderCancel()}  
-      </View>
-      
+
     );
 
 

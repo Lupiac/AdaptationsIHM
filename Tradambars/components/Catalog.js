@@ -46,7 +46,7 @@ const cards = [
     sellerImg: require('../res/atomic.jpg'),
     prodImg: require('../res/atomic.jpg'),
     city: "Nice",
-    coordinates: { latitude: 43.695936, longitude: 7.271436 },
+    coordinates: { latitude: 44.695936, longitude: 7.271436 },
     price: "8€/g"
 
   },
@@ -55,7 +55,7 @@ const cards = [
     sellerImg: require('../res/mystery.jpg'),
     prodImg: require('../res/mystery.jpg'),
     city: "Cannes",
-    coordinates: { latitude: 43.551337, longitude: 7.012585 },
+    coordinates: { latitude: 44.551337, longitude: 7.012585 },
     price: "6.5€/g"
 
   },
@@ -64,7 +64,7 @@ const cards = [
     sellerImg: require('../res/barbapapa.jpg'),
     prodImg: require('../res/barbapapa.jpg'),
     city: "Antibes",
-    coordinates: { latitude: 43.581363, longitude: 7.127822 },
+    coordinates: { latitude: 44.581363, longitude: 7.127822 },
     price: "12€/g"
 
   },
@@ -73,7 +73,43 @@ const cards = [
     sellerImg: require('../res/magicolor.jpg'),
     prodImg: require('../res/magicolor.jpg'),
     city: "Biot",
-    coordinates: { latitude: 43.615826, longitude: 7.072725 },
+    coordinates: { latitude: 44.615826, longitude: 7.072725 },
+    price: "10€/g"
+
+  },
+  {
+    name: 'Carambar Atomic',
+    sellerImg: require('../res/atomic.jpg'),
+    prodImg: require('../res/atomic.jpg'),
+    city: "Nice",
+    coordinates: { latitude: 43.695936, longitude: 8.271436 },
+    price: "8€/g"
+
+  },
+  {
+    name: 'Carambar Mystery',
+    sellerImg: require('../res/mystery.jpg'),
+    prodImg: require('../res/mystery.jpg'),
+    city: "Cannes",
+    coordinates: { latitude: 43.551337, longitude: 8.012585 },
+    price: "6.5€/g"
+
+  },
+  {
+    name: 'Carambar Barbapapa',
+    sellerImg: require('../res/barbapapa.jpg'),
+    prodImg: require('../res/barbapapa.jpg'),
+    city: "Antibes",
+    coordinates: { latitude: 43.581363, longitude: 7.527822 },
+    price: "12€/g"
+
+  },
+  {
+    name: 'Carambar Magicolor',
+    sellerImg: require('../res/magicolor.jpg'),
+    prodImg: require('../res/magicolor.jpg'),
+    city: "Biot",
+    coordinates: { latitude: 43.615826, longitude: 8.572725 },
     price: "10€/g"
 
   },
@@ -91,7 +127,7 @@ const cards = [
     sellerImg: require('../res/mystery.jpg'),
     prodImg: require('../res/mystery.jpg'),
     city: "Cannes",
-    coordinates: { latitude: 43.551337, longitude: 7.012585 },
+    coordinates: { latitude: 43.951337, longitude: 7.012585 },
     price: "6.5€/g"
 
   },
@@ -100,7 +136,7 @@ const cards = [
     sellerImg: require('../res/barbapapa.jpg'),
     prodImg: require('../res/barbapapa.jpg'),
     city: "Antibes",
-    coordinates: { latitude: 43.581363, longitude: 7.127822 },
+    coordinates: { latitude: 43.081363, longitude: 7.127822 },
     price: "12€/g"
 
   },
@@ -109,7 +145,7 @@ const cards = [
     sellerImg: require('../res/magicolor.jpg'),
     prodImg: require('../res/magicolor.jpg'),
     city: "Biot",
-    coordinates: { latitude: 43.615826, longitude: 7.072725 },
+    coordinates: { latitude: 42.615826, longitude: 7.072725 },
     price: "10€/g"
 
   },
@@ -118,7 +154,7 @@ const cards = [
     sellerImg: require('../res/atomic.jpg'),
     prodImg: require('../res/atomic.jpg'),
     city: "Nice",
-    coordinates: { latitude: 43.695936, longitude: 7.271436 },
+    coordinates: { latitude: 44.995936, longitude: 7.371436 },
     price: "8€/g"
 
   },
@@ -127,7 +163,7 @@ const cards = [
     sellerImg: require('../res/mystery.jpg'),
     prodImg: require('../res/mystery.jpg'),
     city: "Cannes",
-    coordinates: { latitude: 43.551337, longitude: 7.012585 },
+    coordinates: { latitude: 43.051337, longitude: 8.012585 },
     price: "6.5€/g"
 
   },
@@ -136,43 +172,7 @@ const cards = [
     sellerImg: require('../res/barbapapa.jpg'),
     prodImg: require('../res/barbapapa.jpg'),
     city: "Antibes",
-    coordinates: { latitude: 43.581363, longitude: 7.127822 },
-    price: "12€/g"
-
-  },
-  {
-    name: 'Carambar Magicolor',
-    sellerImg: require('../res/magicolor.jpg'),
-    prodImg: require('../res/magicolor.jpg'),
-    city: "Biot",
-    coordinates: { latitude: 43.615826, longitude: 7.072725 },
-    price: "10€/g"
-
-  },
-  {
-    name: 'Carambar Atomic',
-    sellerImg: require('../res/atomic.jpg'),
-    prodImg: require('../res/atomic.jpg'),
-    city: "Nice",
-    coordinates: { latitude: 43.695936, longitude: 7.271436 },
-    price: "8€/g"
-
-  },
-  {
-    name: 'Carambar Mystery',
-    sellerImg: require('../res/mystery.jpg'),
-    prodImg: require('../res/mystery.jpg'),
-    city: "Cannes",
-    coordinates: { latitude: 43.551337, longitude: 7.012585 },
-    price: "6.5€/g"
-
-  },
-  {
-    name: 'Carambar Barbapapa',
-    sellerImg: require('../res/barbapapa.jpg'),
-    prodImg: require('../res/barbapapa.jpg'),
-    city: "Antibes",
-    coordinates: { latitude: 43.581363, longitude: 7.127822 },
+    coordinates: { latitude: 43.281363, longitude: 7.197822 },
     price: "12€/g"
 
   },
@@ -194,7 +194,7 @@ export default class Catalog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      radius: 150,
+      radius: 0,
       latitude: this.props.screenProps.latitude,
       longitude: this.props.screenProps.longitude,
       filtered_list: [],
@@ -203,11 +203,23 @@ export default class Catalog extends React.Component {
   }
 
   componentDidMount() {
-    this._refreshPosition();
-    this._filterProducts();
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        this._filterProducts();
+      },
+      (error) => console.log(error)
+      ,
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
     console.log("initlist " + this.state.filtered_list);
   }
   componentWillUnmount() {
+    mSensorManager.stopLightSensor();
+    this.subscription.remove();
   }
 
   _refreshPosition() {
@@ -269,10 +281,11 @@ export default class Catalog extends React.Component {
                 console.log(this.state.longitude);
               },
               (error) => this.setState({ error: error.message }),
-              { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+              { enableHighAccuracy: true, timeout: 20000 },
             );
           }}
           onSlidingComplete={val => {
+            this._refreshPosition();
             this._filterProducts();
           }}
         />
@@ -329,7 +342,7 @@ export default class Catalog extends React.Component {
   }
 
   render() {
-    console.log("latitude " + this.state.latitude);
+    console.log("latitude " + this.props.screenProps.latitude);
     return (
       this.props.screenProps.nightMode ? this._renderItemsNight() : this._renderItemsDay()
     );
