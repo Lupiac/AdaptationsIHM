@@ -3,6 +3,7 @@ const { width, height } = Dimensions.get('window');
 import { StyleSheet, View, Image, Button, Dimensions, TouchableHighlight, Slider } from 'react-native';
 import { Container, Card, CardItem, List, ListItem, Thumbnail, Text, Left, Body, Right, Icon } from 'native-base';
 import geolib from 'geolib'
+import Item from './Item';
 const cards = [
   {
     name: 'Carambar Atomic',
@@ -196,33 +197,56 @@ export default class Catalog extends React.Component {
       radius: 150,
       latitude: this.props.screenProps.latitude,
       longitude: this.props.screenProps.longitude,
-      filtered_list: cards,
+      filtered_list: [],
+      style: this.props.screenProps.style,
     }
   }
 
   componentDidMount() {
+    this._refreshPosition();
+    this._filterProducts();
+    console.log("initlist " + this.state.filtered_list);
   }
   componentWillUnmount() {
   }
 
+  _refreshPosition() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (error) => console.log(error)
+      ,
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  }
+
+
   _filterProducts() {
     let list = [];
     for (let item of cards) {
-
-      if (geolib.getDistance(
+      let dist = geolib.getDistance(
         { latitude: this.state.latitude, longitude: this.state.longitude },
         { latitude: item.coordinates.latitude, longitude: item.coordinates.longitude }
-      ) <= this.state.radius * 1000) {
-        list.push(item);
+      )
+      if (dist <= this.state.radius * 1000) {
+        list.push({ item: item, distance: dist });
       }
     }
+    list.sort((a, b) => a.distance - b.distance);
+
     this.setState({ filtered_list: list });
+    console.log("filteredlist " + this.state.filtered_list);
+
   }
 
 
   _renderItemsDay() {
     return (
-      <View style={{ backgroundColor: 'white', flex: 1 }}>
+      <View style={{ backgroundColor: '#ecf0f1', flex: 1 }}>
         <Text style={{ fontSize: 20, textAlign: 'center', margin: 10, }}>
           Chercher dans un rayon de {this.state.radius} km
         </Text>
@@ -253,27 +277,13 @@ export default class Catalog extends React.Component {
           }}
         />
         <List
-          style={stylesNormal.containerScrollViewNormal}
+          style={this.props.screenProps.style.containerScrollView}
           dataArray={this.state.filtered_list}
-          renderRow={(item) =>
+          renderRow={(prod) =>
             <TouchableHighlight
-              style={stylesNormal.containerNormal}
+              style={this.props.screenProps.style.container}
               activeOpacity={1}>
-              <View>
-                <View style={stylesNormal.viewNormal}>
-                  <Thumbnail square source={item.prodImg} />
-                  <View style={stylesNormal.infoViewNormal}>
-                    <Text style={stylesNormal.prodNameNormal} numberOfLines={1}>{item.name}</Text>
-                    <Text style={stylesNormal.cityAndPriceTextNormal} numberOfLines={1}>
-                      <Text style={stylesNormal.cityNormal}>{item.city}</Text>
-                      <Text style={stylesNormal.priceNormal}> {item.price}</Text>
-                    </Text>
-                  </View>
-                  <Button style={stylesNormal.buyButton} title="Acheter" onPress={() => {
-                    this.props.navigation.navigate('Map', { coordinates: item.coordinates })
-                  }} />
-                </View>
-              </View>
+              <Item nightMode={this.props.screenProps.nightMode} prod={prod} navigation={this.props.navigation} style={this.props.screenProps.style} />
             </TouchableHighlight>
           }>
         </List>
@@ -284,10 +294,10 @@ export default class Catalog extends React.Component {
 
   _renderItemsNight() {
     return (
-      <View style={{ backgroundColor: '#212757', flex: 1 }}>
+      <View style={{ backgroundColor: '#301b70', flex: 1 }}>
         <Text style={{ fontSize: 20, textAlign: 'center', margin: 10, color: 'white' }}>
           Chercher dans un rayon de {this.state.radius} km
-        </Text>
+    </Text>
         <Slider
           style={{ width: 300, justifyContent: "center", alignSelf: "stretch" }}
           step={1}
@@ -296,47 +306,20 @@ export default class Catalog extends React.Component {
           value={this.state.radius}
           onValueChange={val => {
             this.setState({ radius: val })
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                console.log(position);
-                this.setState({
-                  latitude: position.coords.latitude,
-                  longitude: position.coords.longitude,
-                });
-                console.log(this.state.latitude);
-                console.log(this.state.longitude);
-              },
-              (error) => this.setState({ error: error.message }),
-              { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-            );
           }}
           onSlidingComplete={val => {
-            this._filterProducts();
+            this._refreshPosition()
+            this._filterProducts()
           }}
         />
         <List
-          style={stylesNight.containerScrollViewNight}
+          style={this.props.screenProps.style.containerScrollView}
           dataArray={this.state.filtered_list}
-          renderRow={(item) =>
+          renderRow={(prod) =>
             <TouchableHighlight
-              style={stylesNight.containerNight}
+              style={this.props.screenProps.style.container}
               activeOpacity={1}>
-              <View >
-                <View style={stylesNight.viewNight}>
-                  <Thumbnail square source={item.prodImg} />
-                  <View style={stylesNight.infoViewNight}>
-                    <Text style={stylesNight.prodNameNight} numberOfLines={1}>{item.name}</Text>
-                    <Text style={stylesNight.cityAndPriceTextNight} numberOfLines={1}>
-                      <Text style={stylesNight.cityNight}>{item.city}</Text>
-                      <Text style={stylesNight.priceNight}> {item.price}</Text>
-                    </Text>
-                  </View>
-                  <Button style={stylesNormal.buyButton} title="Acheter" onPress={() => {
-                    this.props.navigation.navigate('Map', { coordinates: item.coordinates })
-                  }} />
-                </View>
-
-              </View>
+              <Item nightMode={this.props.screenProps.nightMode} prod={prod} navigation={this.props.navigation} style={this.props.screenProps.style} />
             </TouchableHighlight>
           }>
         </List>
@@ -346,105 +329,10 @@ export default class Catalog extends React.Component {
   }
 
   render() {
+    console.log("latitude " + this.state.latitude);
     return (
       this.props.screenProps.nightMode ? this._renderItemsNight() : this._renderItemsDay()
     );
 
   }
 }
-
-const stylesNormal = StyleSheet.create({
-  containerNormal: {
-    marginBottom: 8,
-  },
-  containerScrollViewNormal: {
-    padding: 8,
-    paddingTop: 4,
-  },
-  viewNormal: {
-    height: 64,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-  },
-
-  infoViewNormal: {
-    marginHorizontal: 16,
-    flex: 1,
-    justifyContent: 'center',
-  },
-
-  prodNameNormal: {
-    color: '#4e4e55',
-    fontWeight: '500',
-    fontSize: 15,
-  },
-
-  cityAndPriceTextNormal: {
-    fontSize: 12,
-    fontWeight: '600',
-    paddingTop: 3
-  },
-
-  cityNormal: {
-    color: '#a0a0a7',
-  },
-
-  priceNormal: {
-    color: '#cbcbd1',
-  },
-  buyButton: {
-    backgroundColor: '#07182a',
-    justifyContent: "center",
-    alignSelf: "stretch",
-    textAlignVertical: "center"
-  }
-});
-
-const stylesNight = StyleSheet.create({
-  containerNight: {
-    marginBottom: 8,
-  },
-  containerScrollViewNight: {
-    padding: 8,
-    paddingTop: 4,
-    backgroundColor: '#212757',
-
-  },
-  viewNight: {
-    height: 64,
-    flexDirection: 'row',
-    backgroundColor: '#2a56a4',
-  },
-
-  infoViewNight: {
-    marginHorizontal: 16,
-    flex: 1,
-    justifyContent: 'center',
-  },
-
-  prodNameNight: {
-    color: '#c2e8f1',
-    fontWeight: '500',
-    fontSize: 15,
-  },
-
-  cityAndPriceTextNight: {
-    fontSize: 12,
-    fontWeight: '600',
-    paddingTop: 3
-  },
-
-  cityNight: {
-    color: '#a0a0a7',
-  },
-
-  priceNight: {
-    color: '#cbcbd1',
-  },
-  buyButton: {
-    backgroundColor: '#07182a',
-    justifyContent: "center",
-    alignSelf: "stretch",
-    textAlignVertical: "center"
-  }
-});

@@ -236,7 +236,7 @@ class Map extends React.Component {
 
     },
       (error) => alert(JSON.stringify(error)),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 })
+      { enableHighAccuracy: true, timeout: 20000})
 
     this.watchID = navigator.geolocation.watchPosition((position) => {
       var lat = parseFloat(position.coords.latitude)
