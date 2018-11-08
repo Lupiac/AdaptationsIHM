@@ -3,29 +3,29 @@ currentDocument = document.currentScript.ownerDocument;
 class Article extends HTMLElement {
     constructor() {
         super();
-        this.open = false;        
+        this.open = false;
     }
 
-    connectedCallback() {           
-        if (!is_smartphone()){                              
+    connectedCallback() {
+        if (!is_smartphone()) {
             this.set_attributes();
-        }      
+        }
         this.add_classes();
-        this.attachShadow({mode: 'open'});        
+        this.attachShadow({mode: 'open'});
         const template = currentDocument.querySelector('#article-template');
         const instance = template.content.cloneNode(true);
         this.shadowRoot.appendChild(instance);
         this.add_event_listener();
-        this.render();        
+        this.render();
     }
 
-    bring_back_button(){
+    bring_back_button() {
         const button = this.shadowRoot.getElementById("card__button");
-        button.style.display = "block";                        
+        button.style.display = "block";
     }
 
     static get observedAttributes() {
-        return ['rating', 'offers','open'];
+        return ['rating', 'offers', 'open'];
     }
 
     draw_star(link, rating_container) {
@@ -37,35 +37,34 @@ class Article extends HTMLElement {
         rating_container.appendChild(star);
     }
 
-    attributeChangedCallback(attr, oldValue, newValue) {  
-        if (attr === "open" && newValue==="true" && is_smartphone()){
-            let button = this.shadowRoot.getElementById("card__button");         
+    attributeChangedCallback(attr, oldValue, newValue) {
+        if (attr === "open" && newValue === "true" && is_smartphone()) {
+            let button = this.shadowRoot.getElementById("card__button");
             button.style.display = "none";
-        }        
-        if (attr === "rating"){
-            let body = this.shadowRoot.getElementById("card__card-body");            
+        }
+        if (attr === "rating") {
             let rating_container = this.shadowRoot.getElementById("rating");
             rating_container.style.display = "block";
-            rating_container.innerHTML = "";                                      
+            rating_container.innerHTML = "";
             const rating = newValue;
             for (let i = 0; i < rating; i++) {
                 this.draw_star("https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-512.png", rating_container);
             }
             for (let i = 0; i < 5 - rating; i++) {
                 this.draw_star("https://cdn4.iconfinder.com/data/icons/sports-technology-and-people/1000/2-01-512.png", rating_container);
-            }            
+            }
         }
-        if (attr === "offers"){            
-            const offers = JSON.parse(newValue);            
+        if (attr === "offers") {
+            const offers = JSON.parse(newValue);
             let sellers = this.shadowRoot.getElementById("sellers");
             sellers.style.display = "block";
             const sellers_count = offers.length;
-            sellers.innerHTML = sellers_count.toString() + " vendeurs à proximité";                
+            sellers.innerHTML = sellers_count.toString() + " vendeurs à proximité";
             this.complete_array(offers);
         }
     }
 
-    complete_array(offers){        
+    complete_array(offers) {
         let array = this.shadowRoot.getElementById("array");
         array.style.display = "flex";
         array.innerHTML = "";
@@ -80,7 +79,7 @@ class Article extends HTMLElement {
             this.generate_button_wrapper(row, offer);
             element.appendChild(row);
             array.appendChild(element);
-        });         
+        });
     }
 
     generate_wrapper() {
@@ -125,12 +124,12 @@ class Article extends HTMLElement {
         row.appendChild(euro_wrapper);
     }
 
-    generate_button_wrapper(row, offer) {
+    generate_button_wrapper(row) {
         let button_wrapper = this.generate_wrapper();
         button_wrapper.setAttribute("class", "offer-action");
         let button = document.createElement("button");
         button.setAttribute("class", "close btn btn-default btn-lg");
-        button.setAttribute("type", "button");        
+        button.setAttribute("type", "button");
         let logo = currentDocument.createElement("i");
         logo.setAttribute("class", "fas fa-shopping-cart");
         button.appendChild(logo);
@@ -138,34 +137,33 @@ class Article extends HTMLElement {
         row.appendChild(button_wrapper);
     }
 
-    add_event_listener() {        
-        this.addEventListener("mouseover", () => this.style.cursor = 'pointer');        
-        this.addEventListener("click",()=>{                      
-            if (is_smartphone() && this.open){                                
+    add_event_listener() {
+        this.addEventListener("mouseover", () => this.style.cursor = 'pointer');
+        this.addEventListener("click", () => {
+            if (is_smartphone() && this.open) {
                 this.bring_back_button();
-                let container = this.shadowRoot.getElementById("card__card-body");   
-                this.shadowRoot.getElementById("rating").style.display = "none";                        
-                this.shadowRoot.getElementById("sellers").style.display = "none";                
+                this.shadowRoot.getElementById("rating").style.display = "none";
+                this.shadowRoot.getElementById("sellers").style.display = "none";
                 this.shadowRoot.getElementById("array").style.display = "none";
-                this.style.boxShadow = "";                                                         
+                this.style.boxShadow = "";
             }
             this.open = !this.open;
-            this.setAttribute("open",this.open.toString());
-        });        
+            this.setAttribute("open", this.open.toString());
+        });
     }
 
     render() {
         const image = this.getAttribute("image");
         const description = this.getAttribute("description");
-        const name = this.getAttribute("name");        
+        const name = this.getAttribute("name");
 
         let img = this.shadowRoot.querySelector("#card__img");
         let img_phone = this.shadowRoot.querySelector("#card__img_phone");
         img.setAttribute("src", image);
-        img_phone.setAttribute("src",image);
+        img_phone.setAttribute("src", image);
 
         let desc = this.shadowRoot.querySelector("#card__card-text");
-        let desc_phone = this.shadowRoot.querySelector("#card__card-text_phone")
+        let desc_phone = this.shadowRoot.querySelector("#card__card-text_phone");
         desc.innerHTML = description;
         desc_phone.innerHTML = description;
 
@@ -176,18 +174,18 @@ class Article extends HTMLElement {
     }
 
     set_attributes() {
-        this.setAttribute("data-toggle","modal");
-        this.setAttribute("data-target","#popup");
+        this.setAttribute("data-toggle", "modal");
+        this.setAttribute("data-target", "#popup");
     }
 
-    add_classes(){        
+    add_classes() {
         this.classList.add('card');
         this.classList.add('text-center');
-        if (!is_smartphone()){
-            this.classList.add('hvr-grow');        
-        }else{
+        if (!is_smartphone()) {
+            this.classList.add('hvr-grow');
+        } else {
             this.style.marginBottom = "5px";
-        }       
+        }
     }
 }
 
